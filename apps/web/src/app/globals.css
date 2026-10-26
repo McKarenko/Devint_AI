@@ -1,0 +1,41 @@
+@import "tailwindcss";
+@import "@devint_ai/ui/globals.css";
+
+:root {
+  --font-size-header: 12px;
+  --font-size-form: 10px;
+  --space-frame: 16px;
+  --background: #ffffff;
+  --foreground: #111111;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-playfair-display-sc);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-playfair-display-sc), serif;
+  font-size: var(--font-size-header);
+}
+
+.header-text,
+.sidebar-text {
+  font-size: var(--font-size-header);
+}
+
+.form-text,
+input,
+textarea,
+select,
+button {
+  font-family: inherit;
+  font-size: var(--font-size-form);
+}
+
+.app-frame {
+  padding: var(--space-frame);
+}

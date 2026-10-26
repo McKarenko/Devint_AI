@@ -1,0 +1,11 @@
+---
+description: Перед любой задачей читать rules.md и plan.md (источник правил — только rules.md)
+alwaysApply: true
+---
+
+Перед началом любой задачи прочитать и полностью соблюдать:
+
+- `.cursor/documentations/rules.md`
+- `.cursor/documentations/plan.md` (статусы и актуальный план — по правилу 23 в rules.md)
+
+Не дублировать и не подменять содержимое `rules.md`. При сомнениях — уточнять у Владимира.

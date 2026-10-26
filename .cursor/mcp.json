@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+    "graphify": {
+      "command": "/Users/Vladimir/.local/bin/graphify-mcp",
+      "args": ["/Users/Vladimir/Desktop/Devint_AI/graphify-out/graph.json"]
+    }
+  }
+}

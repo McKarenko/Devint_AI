@@ -1,0 +1,12 @@
+node_modules/
+.next/
+dist/
+build/
+out/
+coverage/
+graphify-out/cache/
+graphify-out/cost.json
+*.log
+.DS_Store
+apps/web/ios/
+apps/web/android/

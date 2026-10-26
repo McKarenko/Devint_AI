@@ -1,0 +1,41 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# builds
+dist/
+build/
+.next/
+out/
+*.tsbuildinfo
+
+# caches
+.cache/
+.turbo/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Graphify local-only
+graphify-out/cost.json
+graphify-out/cache/
+
+# tests / coverage
+coverage/
+.nyc_output/
+
+# misc
+*.pem
+.vercel

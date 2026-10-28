@@ -1,17 +1,17 @@
 # Graph Report - Devint_AI  (2026-10-28)
 
 ## Corpus Check
-- 74 files · ~31,257 words
+- 75 files · ~31,900 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 11 file(s) not represented in the graph (top: (none) 5, .css 3, .mdc 1)
 
 ## Summary
-- 502 nodes · 834 edges · 33 communities (23 shown, 10 thin omitted)
+- 512 nodes · 852 edges · 34 communities (24 shown, 10 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 1 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `42ac682b`
+- Built from commit: `b4989019`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -42,6 +42,7 @@
 - throttle.ts
 - offer-draft-1.md
 - privacy-draft-1.md
+- handoff-secret-tests.sh
 
 ## God Nodes (most connected - your core abstractions)
 1. `registerAuthRoutes()` - 38 edges
@@ -70,15 +71,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (33 total, 10 thin omitted)
+## Communities (34 total, 10 thin omitted)
 
 ### Community 0 - "web/package.json"
 Cohesion: 0.13
 Nodes (20): devDependencies, eslint@^9, eslint-config-next@^15.5.7, tailwindcss@^4, @tailwindcss/postcss@^4, @types/node@^22, @types/react@^19, @types/react-dom@^19 (+12 more)
 
 ### Community 1 - "ui/package.json"
-Cohesion: 0.07
-Nodes (35): dependencies, class-variance-authority@^0.7.1, clsx@^2.1.1, lucide-react@^1.62.0, @radix-ui/react-dialog@^1.3.1, @radix-ui/react-slot@^1.2.3, tailwind-merge@^3.3.1, devDependencies (+27 more)
+Cohesion: 0.08
+Nodes (33): dependencies, class-variance-authority@^0.7.1, clsx@^2.1.1, @radix-ui/react-dialog@^1.3.1, @radix-ui/react-slot@^1.2.3, tailwind-merge@^3.3.1, devDependencies, @types/react@^19.1.8 (+25 more)
 
 ### Community 2 - "api/package.json"
 Cohesion: 0.06
@@ -106,7 +107,7 @@ Nodes (18): engines, node, name, postcss, packageManager, pnpm, overrides, priva
 
 ### Community 8 - "conor-face.tsx"
 Cohesion: 0.06
-Nodes (48): clampUnit(), faceGazes, faceStates, HomePage(), onPointerMove(), readLegal(), RegisterPage(), RegisterForm() (+40 more)
+Nodes (50): clampUnit(), faceGazes, faceStates, HomePage(), onPointerMove(), readLegal(), RegisterPage(), RegisterForm() (+42 more)
 
 ### Community 9 - "db"
 Cohesion: 0.17
@@ -149,8 +150,8 @@ Cohesion: 0.33
 Nodes (6): scripts, build, dev, lint, start, typecheck
 
 ### Community 24 - "handoff.sh"
-Cohesion: 0.52
-Nodes (6): filter_stat(), is_blocked_path(), is_sensitive_key(), report_secret(), handoff.sh script, TZ
+Cohesion: 0.31
+Nodes (12): assignment_has_secret(), filter_stat(), is_blocked_path(), is_placeholder_value(), is_sensitive_assignment_name(), is_sensitive_key(), report_secret(), scan_secret_file() (+4 more)
 
 ### Community 25 - "throttle.ts"
 Cohesion: 0.10
@@ -164,6 +165,10 @@ Nodes (5): Возврат, Общие положения, Ограничения
 Cohesion: 0.33
 Nodes (5): Какие данные собираются, Контакты, Права пользователя, Хранение, Цели
 
+### Community 33 - "handoff-secret-tests.sh"
+Cohesion: 0.83
+Nodes (3): expect_clean(), expect_secret(), handoff-secret-tests.sh script
+
 ## Knowledge Gaps
 - **6 isolated node(s):** `npx`, `@upstash/context7-mcp`, `/Users/Vladimir/.local/bin/graphify-mcp`, `../../config/tsconfig.base.json`, `../../config/tsconfig.base.json` (+1 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 208 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
@@ -173,15 +178,15 @@ Nodes (5): Какие данные собираются, Контакты, Пр�
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `next` connect `layout.tsx` to `web/package.json`, `conor-face.tsx`, `password-policy.ts`?**
-  _High betweenness centrality (0.127) - this node is a cross-community bridge._
+  _High betweenness centrality (0.122) - this node is a cross-community bridge._
 - **What connects `npx`, `@upstash/context7-mcp`, `/Users/Vladimir/.local/bin/graphify-mcp` to the rest of the system?**
   _6 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `web/package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._
 - **Why does `drizzle-orm` connect `throttle.ts` to `api/package.json`, `auth.ts`, `server.ts`?**
-  _High betweenness centrality (0.035) - this node is a cross-community bridge._
+  _High betweenness centrality (0.034) - this node is a cross-community bridge._
 - **Should `ui/package.json` be split into smaller, more focused modules?**
-  _Cohesion score 0.07301587301587302 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0766488413547237 - nodes in this community are weakly interconnected._
 - **Should `api/package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.060129509713228495 - nodes in this community are weakly interconnected._
 - **Should `compilerOptions` be split into smaller, more focused modules?**

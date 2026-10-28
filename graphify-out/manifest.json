@@ -402,9 +402,9 @@
     "semantic_hash": ""
   },
   "scripts/handoff.sh": {
-    "mtime": 1793219455.4915216,
-    "seen": 1793219509.565113,
-    "ast_hash": "63f0de6cf675d7801340854c29627fe7",
+    "mtime": 1793220457.331936,
+    "seen": 1793220471.633499,
+    "ast_hash": "3363b7d15e17500ca6c842091b591d99",
     "semantic_hash": ""
   },
   ".ai/claude.md": {
@@ -432,9 +432,9 @@
     "semantic_hash": ""
   },
   "scripts/handoff-secret-tests.sh": {
-    "mtime": 1793219497.9345322,
-    "seen": 1793219509.565111,
-    "ast_hash": "06d3c77401994c04bf3757871fffe96d",
+    "mtime": 1793220457.6203623,
+    "seen": 1793220471.6334982,
+    "ast_hash": "061174d2cbbbd7d74e12697a365dc0fb",
     "semantic_hash": ""
   },
   "pnpm-lock.yaml": {

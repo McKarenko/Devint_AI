@@ -133,7 +133,7 @@ assignment_has_secret() {
     line="${line#export}"
     line="${line#"${line%%[![:space:]]*}"}"
   fi
-  if [[ ! "$line" =~ ^([A-Za-z_][A-Za-z0-9_]*)=(.*)$ ]]; then
+  if [[ ! "$line" =~ ^([A-Za-z_][A-Za-z0-9_]*)[[:space:]]*=[[:space:]]*(.*)$ ]]; then
     return 1
   fi
   name="${BASH_REMATCH[1]}"

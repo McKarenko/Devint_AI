@@ -7,6 +7,9 @@ node_modules/
 .env.local
 .env.*.local
 
+# Локальный отчёт для старшего агента
+.ai/handoff.md
+
 # builds
 dist/
 build/

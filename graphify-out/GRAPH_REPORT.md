@@ -1,17 +1,17 @@
 # Graph Report - Devint_AI  (2026-10-28)
 
 ## Corpus Check
-- 69 files · ~28,631 words
+- 74 files · ~31,257 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 10 file(s) not represented in the graph (top: (none) 4, .css 3, .mdc 1)
+- Unclassified: 11 file(s) not represented in the graph (top: (none) 5, .css 3, .mdc 1)
 
 ## Summary
-- 491 nodes · 823 edges · 28 communities (22 shown, 6 thin omitted)
+- 502 nodes · 834 edges · 33 communities (23 shown, 10 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 1 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5cc7e2e1`
+- Built from commit: `42ac682b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -38,6 +38,7 @@
 - Сторонние списки
 - layout.tsx
 - scripts
+- handoff.sh
 - throttle.ts
 - offer-draft-1.md
 - privacy-draft-1.md
@@ -69,7 +70,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (28 total, 6 thin omitted)
+## Communities (33 total, 10 thin omitted)
 
 ### Community 0 - "web/package.json"
 Cohesion: 0.13
@@ -116,8 +117,8 @@ Cohesion: 0.22
 Nodes (6): compat, __dirname, eslintConfig, __filename, @eslint/eslintrc@^3, @eslint/eslintrc
 
 ### Community 11 - "auth.ts"
-Cohesion: 0.06
-Nodes (65): NodeEnv, alreadyRegisteredLetter(), createEmailToken(), EmailToken, hashEmailToken(), MailLetter, passwordChangedLetter(), resetPasswordLetter() (+57 more)
+Cohesion: 0.05
+Nodes (67): NodeEnv, alreadyRegisteredLetter(), createEmailToken(), EmailToken, hashEmailToken(), MailLetter, passwordChangedLetter(), resetPasswordLetter() (+59 more)
 
 ### Community 12 - "context7"
 Cohesion: 0.33
@@ -147,9 +148,13 @@ Nodes (5): next@^15.5.7, metadata, montserrat, viewport, next
 Cohesion: 0.33
 Nodes (6): scripts, build, dev, lint, start, typecheck
 
+### Community 24 - "handoff.sh"
+Cohesion: 0.52
+Nodes (6): filter_stat(), is_blocked_path(), is_sensitive_key(), report_secret(), handoff.sh script, TZ
+
 ### Community 25 - "throttle.ts"
 Cohesion: 0.10
-Nodes (34): CleanupLog, runAccountCleanup(), getDatabase(), authEvents, emailTokens, legalAcceptances, loginFailures, mailEvents (+26 more)
+Nodes (32): CleanupLog, runAccountCleanup(), getDatabase(), authEvents, emailTokens, legalAcceptances, loginFailures, mailEvents (+24 more)
 
 ### Community 26 - "offer-draft-1.md"
 Cohesion: 0.33
@@ -160,21 +165,21 @@ Cohesion: 0.33
 Nodes (5): Какие данные собираются, Контакты, Права пользователя, Хранение, Цели
 
 ## Knowledge Gaps
-- **5 isolated node(s):** `npx`, `@upstash/context7-mcp`, `/Users/Vladimir/.local/bin/graphify-mcp`, `../../config/tsconfig.base.json`, `../../config/tsconfig.base.json`
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 203 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **6 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **6 isolated node(s):** `npx`, `@upstash/context7-mcp`, `/Users/Vladimir/.local/bin/graphify-mcp`, `../../config/tsconfig.base.json`, `../../config/tsconfig.base.json` (+1 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 208 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `next` connect `layout.tsx` to `web/package.json`, `conor-face.tsx`, `password-policy.ts`?**
-  _High betweenness centrality (0.133) - this node is a cross-community bridge._
+  _High betweenness centrality (0.127) - this node is a cross-community bridge._
 - **What connects `npx`, `@upstash/context7-mcp`, `/Users/Vladimir/.local/bin/graphify-mcp` to the rest of the system?**
-  _5 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _6 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `web/package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._
 - **Why does `drizzle-orm` connect `throttle.ts` to `api/package.json`, `auth.ts`, `server.ts`?**
-  _High betweenness centrality (0.037) - this node is a cross-community bridge._
+  _High betweenness centrality (0.035) - this node is a cross-community bridge._
 - **Should `ui/package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.07301587301587302 - nodes in this community are weakly interconnected._
 - **Should `api/package.json` be split into smaller, more focused modules?**

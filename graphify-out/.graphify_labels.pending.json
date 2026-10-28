@@ -23,8 +23,13 @@
   "21": "Сторонние списки",
   "22": "layout.tsx",
   "23": "scripts",
+  "24": "handoff.sh",
   "25": "throttle.ts",
   "26": "offer-draft-1.md",
   "27": "privacy-draft-1.md",
-  "29": "risks.md"
+  "28": "claude.md",
+  "29": "risks.md",
+  "30": "cursor.md",
+  "31": "gpt.md",
+  "32": "timework.md"
 }

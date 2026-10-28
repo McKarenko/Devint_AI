@@ -202,6 +202,45 @@
   outline-offset: 2px;
 }
 
+.auth-stage {
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-stage.is-moving {
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.auth-stage-ghost {
+  width: 100%;
+}
+
+.auth-stage-leave-register .auth-card {
+  animation: auth-card-leave-left 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.auth-stage-enter-register .auth-card {
+  animation: auth-card-enter-right 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.auth-stage-leave-login .auth-card {
+  animation: auth-card-leave-right 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.auth-stage-enter-login .auth-card {
+  animation: auth-card-enter-left 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.auth-forgot {
+  margin: 16px 0 0;
+  color: var(--color-link);
+  font-size: var(--font-size-body);
+  text-align: center;
+  text-decoration: underline;
+  text-decoration-color: var(--color-link-line);
+}
+
 @property --diode-angle {
   syntax: "<angle>";
   inherits: false;
@@ -243,6 +282,54 @@
   }
 }
 
+@keyframes auth-card-leave-left {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(-110%);
+  }
+}
+
+@keyframes auth-card-enter-right {
+  from {
+    opacity: 0;
+    transform: translateX(110%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes auth-card-leave-right {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(110%);
+  }
+}
+
+@keyframes auth-card-enter-left {
+  from {
+    opacity: 0;
+    transform: translateX(-110%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 @keyframes diode-angle {
   0% {
     --diode-angle: 0deg;
@@ -281,7 +368,11 @@
   .brand-orbit,
   .brand-spark,
   .auth-card::before,
-  .auth-card::after {
+  .auth-card::after,
+  .auth-stage-leave-register .auth-card,
+  .auth-stage-enter-register .auth-card,
+  .auth-stage-leave-login .auth-card,
+  .auth-stage-enter-login .auth-card {
     animation: none;
   }
 

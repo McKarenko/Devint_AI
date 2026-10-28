@@ -126,8 +126,8 @@
     "semantic_hash": ""
   },
   ".cursor/documentations/rules.md": {
-    "mtime": 1793217439.8884606,
-    "seen": 1793217491.3041742,
+    "mtime": 1793223103.3822565,
+    "seen": 1793223775.663147,
     "ast_hash": "df291ed657c1915cb1d6c86d05572ad2",
     "semantic_hash": ""
   },
@@ -275,24 +275,6 @@
     "ast_hash": "2fdec60339ef243dcaca42a0c7bce717",
     "semantic_hash": ""
   },
-  "apps/web/src/app/register/page.tsx": {
-    "mtime": 1793207936.2924275,
-    "seen": 1793217491.3040159,
-    "ast_hash": "ec27670b510cc493e00edaf673e891da",
-    "semantic_hash": ""
-  },
-  "apps/web/src/app/register/register-form.tsx": {
-    "mtime": 1793207936.2925549,
-    "seen": 1793217491.3040168,
-    "ast_hash": "caa7940ad53552b5646aa1f9999a308b",
-    "semantic_hash": ""
-  },
-  "apps/web/src/app/register/register-rules.ts": {
-    "mtime": 1793207936.41426,
-    "seen": 1793217491.304018,
-    "ast_hash": "ac7247a76ad7a49cee0180d55f8bb1a5",
-    "semantic_hash": ""
-  },
   "apps/web/src/components/auth/auth-card.tsx": {
     "mtime": 1793207936.339414,
     "seen": 1793217491.304019,
@@ -300,9 +282,9 @@
     "semantic_hash": ""
   },
   "apps/web/src/components/auth/auth-shell.tsx": {
-    "mtime": 1793207936.41398,
-    "seen": 1793217491.30402,
-    "ast_hash": "f18524d6a90f0273515a795b4a6ca9b2",
+    "mtime": 1793223231.791372,
+    "seen": 1793223775.6625888,
+    "ast_hash": "e96544f46ed797395d84908a1013e4c6",
     "semantic_hash": ""
   },
   "apps/web/src/components/auth/brand-logo.tsx": {
@@ -402,8 +384,8 @@
     "semantic_hash": ""
   },
   "scripts/handoff.sh": {
-    "mtime": 1793217400.278612,
-    "seen": 1793217491.304169,
+    "mtime": 1793223103.4001315,
+    "seen": 1793223775.6630442,
     "ast_hash": "f260b9f99813128c009a7290b10b67ee",
     "semantic_hash": ""
   },
@@ -420,15 +402,63 @@
     "semantic_hash": ""
   },
   ".ai/gpt.md": {
-    "mtime": 1793215907.7716453,
-    "seen": 1793217491.304171,
+    "mtime": 1793223103.3952272,
+    "seen": 1793223775.663093,
     "ast_hash": "2fccd51b325c345936aae0ec034f0d37",
     "semantic_hash": ""
   },
   ".ai/timework.md": {
-    "mtime": 1793216129.1280625,
-    "seen": 1793217491.304172,
+    "mtime": 1793223103.3954997,
+    "seen": 1793223775.663094,
     "ast_hash": "5e82395b6ceae8a0b46de2aff72d2a8d",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/(auth)/layout.tsx": {
+    "mtime": 1793223248.4182367,
+    "seen": 1793223775.662488,
+    "ast_hash": "b64937340d37004e133e5c144bbb6d54",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/(auth)/login/login-form.tsx": {
+    "mtime": 1793223297.7163358,
+    "seen": 1793223775.6624901,
+    "ast_hash": "cca8d238b3794fbfad3396052c088a83",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/(auth)/login/page.tsx": {
+    "mtime": 1793223285.7306123,
+    "seen": 1793223775.6624908,
+    "ast_hash": "9b7222ed4cc0ea44b66ee054e06c0799",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/(auth)/register/page.tsx": {
+    "mtime": 1793223249.8529747,
+    "seen": 1793223775.6624918,
+    "ast_hash": "b79c8e6c5476734936b830d9367b0b46",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/(auth)/register/register-form.tsx": {
+    "mtime": 1793223251.4072309,
+    "seen": 1793223775.6624918,
+    "ast_hash": "f1d5eac2ca68fd2b65004fe42f1e77a9",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/(auth)/register/register-rules.ts": {
+    "mtime": 1793207936.41426,
+    "seen": 1793223775.662493,
+    "ast_hash": "ac7247a76ad7a49cee0180d55f8bb1a5",
+    "semantic_hash": ""
+  },
+  "apps/web/src/components/auth/auth-stage.tsx": {
+    "mtime": 1793223684.248532,
+    "seen": 1793223775.66259,
+    "ast_hash": "4f824ad1d9325f8ead6055374c03935c",
+    "semantic_hash": ""
+  },
+  "apps/web/src/components/auth/auth-switch-link.tsx": {
+    "mtime": 1793223247.4005804,
+    "seen": 1793223775.662591,
+    "ast_hash": "a9ca50743f78c54041ddca68c80d5489",
     "semantic_hash": ""
   },
   "pnpm-lock.yaml": {

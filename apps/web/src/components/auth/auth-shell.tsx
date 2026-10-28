@@ -1,10 +1,9 @@
 import type { ReactNode } from "react"
 
-import { AuthCard } from "./auth-card"
 import { BrandLogo } from "./brand-logo"
 import "./auth.css"
 
-/** Общая оболочка страниц входа: фон, логотип, название и карточка. */
+/** Общая оболочка: фон, логотип и название. Карточка живёт отдельно и может уезжать. */
 function AuthShell({ children }: { children: ReactNode }) {
   return (
     <main className="auth-shell">
@@ -13,7 +12,7 @@ function AuthShell({ children }: { children: ReactNode }) {
         <span>DEVINT </span>
         <span className="auth-wordmark-ai">AI</span>
       </p>
-      <AuthCard>{children}</AuthCard>
+      {children}
     </main>
   )
 }

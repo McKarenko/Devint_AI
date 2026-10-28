@@ -4,20 +4,22 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "../lib/utils"
 
-/** Варианты кнопки UI Kit. */
+/** Варианты кнопки. default — главная, цвета только из токенов. */
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap border border-transparent bg-transparent font-medium text-[var(--color-text)] transition-[background,color,box-shadow,transform,border-color] duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-light)] disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+        default:
+          "border-transparent text-[var(--color-on-accent)] [background:var(--button-primary-bg)] [box-shadow:var(--button-primary-shadow)] hover:[background:var(--button-primary-bg-hover)] hover:[box-shadow:var(--button-primary-shadow),var(--button-primary-glow)] active:scale-[0.985] active:[box-shadow:var(--button-primary-shadow),var(--button-primary-glow-active)]",
+        outline:
+          "border-[var(--border)] hover:border-[var(--color-accent)] hover:bg-[var(--color-hover)] hover:text-[var(--color-accent-light)] hover:[box-shadow:var(--button-soft-glow)]",
+        ghost:
+          "hover:bg-[var(--color-hover)] hover:text-[var(--color-accent-light)] hover:[box-shadow:var(--button-soft-glow)]",
       },
       size: {
-        default: "h-8 px-3",
-        sm: "h-7 px-2",
-        lg: "h-9 px-4",
+        default: "h-12 px-4 text-[length:var(--font-size-control)]",
+        sm: "h-9 px-3 text-[length:var(--font-size-body)]",
       },
     },
     defaultVariants: {

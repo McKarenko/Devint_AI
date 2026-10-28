@@ -1,41 +1,75 @@
 @import "tailwindcss";
+@source "../../../../packages/ui/src";
 @import "@devint_ai/ui/globals.css";
 
 :root {
-  --font-size-header: 12px;
-  --font-size-form: 10px;
-  --space-frame: 16px;
-  --background: #ffffff;
-  --foreground: #111111;
+  --font-size-hint: 12px;
+  --font-size-body: 14px;
+  --font-size-control: 16px;
+  --font-size-title-small: 20px;
+  --font-size-title: 24px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-playfair-display-sc);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --font-sans: var(--font-montserrat);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-playfair-display-sc), serif;
-  font-size: var(--font-size-header);
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: var(--font-size-body);
 }
 
-.header-text,
-.sidebar-text {
-  font-size: var(--font-size-header);
+h1,
+.page-title {
+  font-size: var(--font-size-title);
+}
+
+h2 {
+  font-size: var(--font-size-title-small);
+}
+
+.hint-text,
+.error-text {
+  font-size: var(--font-size-hint);
 }
 
 .form-text,
 input,
 textarea,
-select,
+select {
+  font-family: inherit;
+  font-size: var(--font-size-control);
+}
+
 button {
   font-family: inherit;
-  font-size: var(--font-size-form);
 }
 
 .app-frame {
-  padding: var(--space-frame);
+  padding: var(--space-4);
 }

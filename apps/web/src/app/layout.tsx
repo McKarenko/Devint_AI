@@ -1,20 +1,25 @@
-import type { Metadata } from "next"
-import { Playfair_Display_SC } from "next/font/google"
+import type { Metadata, Viewport } from "next"
+import localFont from "next/font/local"
 
 import "./globals.css"
 
-/** Единственный шрифт продукта (SIL OFL 1.1 — коммерческое использование разрешено). */
-const playfairDisplaySc = Playfair_Display_SC({
-  weight: ["400", "700"],
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-playfair-display-sc",
+/** Единственный шрифт продукта. Файлы лежат в проекте, лицензия OFL. */
+const montserrat = localFont({
+  src: "../fonts/Montserrat[wght].ttf",
+  weight: "300 600",
   display: "swap",
+  variable: "--font-montserrat",
 })
 
 /** Метаданные приложения. */
 export const metadata: Metadata = {
   title: "devint_ai",
   description: "devint_ai",
+}
+
+/** Цвет панели браузера, чтобы при загрузке не мелькал белый. */
+export const viewport: Viewport = {
+  themeColor: "#05070b",
 }
 
 /** Корневой layout приложения. */
@@ -25,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={`${playfairDisplaySc.variable} antialiased`}>
+      <body className={`${montserrat.variable} antialiased`}>
         {children}
       </body>
     </html>

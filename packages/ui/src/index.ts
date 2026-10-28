@@ -1,2 +1,7 @@
 export { Button, buttonVariants, type ButtonProps } from "./components/button"
+export { Checkbox } from "./components/checkbox"
+export { Dialog, DialogContent } from "./components/dialog"
+export { Input } from "./components/input"
+export { PasswordInput } from "./components/password-input"
+export { ConorFace, type ConorFaceProps, type ConorFaceState, type ConorGaze } from "./conor-face"
 export { cn } from "./lib/utils"

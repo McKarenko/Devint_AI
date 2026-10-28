@@ -7,11 +7,18 @@
     "dev": "pnpm --filter @devint_ai/web dev",
     "dev:web": "pnpm --filter @devint_ai/web dev",
     "dev:api": "pnpm --filter @devint_ai/api dev",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
     "build": "pnpm -r --filter \"./apps/*\" --filter \"./packages/*\" build",
     "lint": "pnpm -r --filter \"./apps/*\" --filter \"./packages/*\" lint",
     "typecheck": "pnpm -r --filter \"./apps/*\" --filter \"./packages/*\" typecheck"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
+  },
+  "pnpm": {
+    "overrides": {
+      "postcss": ">=8.5.23"
+    }
   }
 }

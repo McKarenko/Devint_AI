@@ -1,0 +1,14 @@
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?Задайте POSTGRES_USER в файле .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Задайте POSTGRES_PASSWORD в файле .env}
+      POSTGRES_DB: ${POSTGRES_DB:?Задайте POSTGRES_DB в файле .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

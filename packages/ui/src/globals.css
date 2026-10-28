@@ -1,16 +1,76 @@
 :root {
-  --font-size-header: 12px;
-  --font-size-form: 10px;
-  --space-frame: 16px;
-  --background: 0 0% 100%;
-  --foreground: 0 0% 8%;
-  --primary: 0 0% 9%;
-  --primary-foreground: 0 0% 98%;
-  --accent: 0 0% 96%;
-  --accent-foreground: 0 0% 9%;
-  --input: 0 0% 85%;
-  --ring: 0 0% 9%;
-  --border: 0 0% 90%;
+  --font-size-hint: 12px;
+  --font-size-body: 14px;
+  --font-size-control: 16px;
+  --font-size-title-small: 20px;
+  --font-size-title: 24px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --color-page: #05070b;
+  --color-card: rgba(255, 255, 255, 0.03);
+  --color-card-border: rgba(255, 255, 255, 0.08);
+  --color-card-highlight: rgba(255, 255, 255, 0.07);
+  --color-text: #eaf4ff;
+  --color-text-muted: rgba(200, 220, 240, 0.55);
+  --color-placeholder: rgba(200, 220, 240, 0.42);
+  --color-accent: #3aa8ff;
+  --color-accent-light: #8fdcff;
+  --color-accent-deep: #1d6fff;
+  --color-link: #4db3ff;
+  --color-link-line: rgba(77, 179, 255, 0.3);
+  --color-error: #e85d5d;
+  --color-field: rgba(255, 255, 255, 0.04);
+  --color-field-border: rgba(255, 255, 255, 0.09);
+  --color-field-focus-border: rgba(58, 168, 255, 0.85);
+  --color-field-focus-bg: rgba(58, 168, 255, 0.05);
+  --color-field-focus-ring: rgba(29, 111, 255, 0.16);
+  --color-hover: rgba(58, 168, 255, 0.12);
+  --color-on-accent: #ffffff;
+  --color-eye: #7f9bb3;
+  --color-wordmark: #f2f8ff;
+  --color-dialog: #08111d;
+  --color-dialog-border: rgba(255, 255, 255, 0.1);
+  --color-overlay: rgba(2, 5, 10, 0.82);
+  --color-check-border: rgba(255, 255, 255, 0.22);
+  --color-check-ring: rgba(29, 111, 255, 0.2);
+  --color-core: #031126;
+  --color-core-border: rgba(150, 220, 255, 0.9);
+  --color-core-glow: rgba(58, 168, 255, 0.55);
+  --color-core-glow-strong: rgba(58, 168, 255, 0.95);
+  --color-sphere-hot: #e6fbff;
+  --color-sphere-mid: #4fb8ff;
+  --color-sphere-deep: #1346d6;
+  --color-diode-tail: rgba(58, 168, 255, 0);
+  --color-spark: #e6f9ff;
+  --color-page-glow: rgba(29, 111, 255, 0.24);
+  --color-logo-glow: rgba(40, 120, 255, 0.32);
+  --button-primary-bg: linear-gradient(180deg, #2f8cff, #1d6fff);
+  --button-primary-bg-hover: linear-gradient(180deg, #4a9bff, #2a7cff);
+  --button-primary-shadow: 0 10px 26px -10px rgba(29, 111, 255, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  --button-primary-glow: 0 0 28px 4px rgba(58, 168, 255, 0.55);
+  --button-primary-glow-active: 0 0 16px 2px rgba(58, 168, 255, 0.35);
+  --button-soft-glow: 0 0 20px rgba(58, 168, 255, 0.35);
+  --background: var(--color-page);
+  --foreground: var(--color-text);
+  --card: #071524;
+  --card-foreground: #e6f3ff;
+  --popover: #071524;
+  --popover-foreground: #e6f3ff;
+  --primary: #3aa8ff;
+  --primary-foreground: #05070b;
+  --secondary: #071524;
+  --secondary-foreground: #e6f3ff;
+  --muted: #071524;
+  --muted-foreground: #7f9bb3;
+  --accent: #1d6fff;
+  --accent-foreground: #e6f3ff;
+  --border: #0f2a40;
+  --input: #0f2a40;
+  --ring: #8fdcff;
+  --destructive: #e85d5d;
+  --destructive-foreground: #05070b;
 }
 
 * {
@@ -21,34 +81,212 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background: hsl(var(--background));
-  color: hsl(var(--foreground));
+  color-scheme: dark;
+  background: var(--color-page);
+  color: var(--color-text);
 }
 
-.bg-background {
-  background: hsl(var(--background));
+.field-control {
+  width: 100%;
+  height: 52px;
+  border-radius: 12px;
+  border: 1px solid var(--color-field-border);
+  background: var(--color-field);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--font-size-control);
+  text-align: center;
+  padding: 0 16px;
 }
 
-.bg-primary {
-  background: hsl(var(--primary));
+.field-control::placeholder {
+  color: var(--color-placeholder);
 }
 
-.text-primary-foreground {
-  color: hsl(var(--primary-foreground));
+.field-control:focus {
+  outline: none;
+  border-color: var(--color-field-focus-border);
+  background: var(--color-field-focus-bg);
+  box-shadow: 0 0 0 4px var(--color-field-focus-ring);
 }
 
-.bg-accent {
-  background: hsl(var(--accent));
+.field-control[aria-invalid="true"] {
+  border-color: var(--color-error);
 }
 
-.text-accent-foreground {
-  color: hsl(var(--accent-foreground));
+.field-password {
+  padding-right: 48px;
+  padding-left: 48px;
 }
 
-.border-input {
-  border-color: hsl(var(--input));
+.password-field {
+  position: relative;
 }
 
-.ring-ring {
-  --tw-ring-color: hsl(var(--ring));
+.password-toggle {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-eye);
+  cursor: pointer;
+}
+
+.password-toggle:hover {
+  background: var(--color-hover);
+  color: var(--color-accent);
+}
+
+.password-toggle:active {
+  transform: scale(0.88);
+}
+
+.password-toggle:focus-visible {
+  outline: 2px solid var(--color-accent-light);
+  outline-offset: 2px;
+}
+
+.password-toggle svg {
+  animation: eye-swap 0.25s ease;
+}
+
+.check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.check-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.check-box {
+  display: inline-flex;
+  width: 19px;
+  height: 19px;
+  flex: 0 0 19px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+  border: 1px solid var(--color-check-border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-on-accent);
+}
+
+.check-input:checked + .check-label .check-box {
+  border-color: var(--color-accent);
+  background: var(--color-accent-deep);
+  box-shadow: 0 0 0 4px var(--color-check-ring);
+}
+
+.check-input:focus-visible + .check-label .check-box {
+  outline: 2px solid var(--color-accent-light);
+  outline-offset: 2px;
+}
+
+.check-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body);
+  line-height: 1.4;
+}
+
+.check-link {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--color-link);
+  font: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--color-link-line);
+  cursor: pointer;
+}
+
+.check-link:focus-visible {
+  outline: 2px solid var(--color-accent-light);
+  outline-offset: 2px;
+}
+
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: var(--color-overlay);
+}
+
+.dialog-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 41;
+  width: calc(100% - 32px);
+  max-width: 380px;
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--color-dialog-border);
+  border-radius: 24px;
+  background: var(--color-dialog);
+  padding: 28px;
+  box-shadow: 0 30px 60px -20px #000;
+}
+
+.dialog-window:focus {
+  outline: none;
+}
+
+.dialog-title {
+  margin: 0 0 16px;
+  color: var(--color-text);
+  font-size: var(--font-size-title-small);
+  font-weight: 500;
+  text-align: center;
+}
+
+.dialog-body {
+  max-height: 240px;
+  overflow: auto;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body);
+  white-space: pre-wrap;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.dialog-actions > * {
+  flex: 1;
+}
+
+@keyframes eye-swap {
+  from {
+    transform: scale(0.7) rotate(-20deg);
+  }
+
+  to {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .password-toggle,
+  .password-toggle svg {
+    animation: none;
+    transition: none;
+  }
 }

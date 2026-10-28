@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1793054957529,
+      "tag": "0000_users",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793108045265,
+      "tag": "0001_neat_speedball",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793127650236,
+      "tag": "0002_email_verification",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793133977400,
+      "tag": "0003_sessions",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793179108926,
+      "tag": "0004_password_reset",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793183785345,
+      "tag": "0005_login_throttle",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793197227488,
+      "tag": "0006_trusted_pairs",
+      "breakpoints": true
+    }
+  ]
+}

@@ -1,0 +1,292 @@
+.auth-shell {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px 48px;
+  background-color: var(--color-page);
+  background-image: radial-gradient(70% 36% at 50% 0%, var(--color-page-glow), transparent 72%);
+}
+
+.brand-logo {
+  position: relative;
+  width: 150px;
+  height: 160px;
+}
+
+.brand-logo-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 0;
+  width: 300px;
+  height: 300px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, var(--color-logo-glow), transparent 65%);
+  pointer-events: none;
+}
+
+.brand-logo-image {
+  position: relative;
+  z-index: 1;
+  width: 150px;
+  height: 160px;
+}
+
+.brand-core {
+  position: absolute;
+  z-index: 2;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--color-core-border);
+  border-radius: 50%;
+  background: var(--color-core);
+  animation: core-glow 3s ease-in-out infinite alternate;
+}
+
+.brand-core-sphere {
+  position: absolute;
+  inset: 9%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--color-sphere-hot) 0, var(--color-sphere-mid) 38%, var(--color-sphere-deep) 100%);
+}
+
+.brand-orbit {
+  position: absolute;
+  inset: 0;
+  animation: orbit-spin 6s linear infinite;
+}
+
+.brand-orbit-back {
+  animation-duration: 10s;
+  animation-direction: reverse;
+}
+
+.brand-glint {
+  position: absolute;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--color-on-accent);
+}
+
+.brand-glint-soft {
+  opacity: 0.55;
+}
+
+.brand-spark {
+  position: absolute;
+  z-index: 3;
+  width: 9px;
+  height: 9px;
+  background: var(--color-spark);
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+  animation: spark-twinkle 2.6s ease-in-out infinite;
+}
+
+.auth-wordmark {
+  margin: 16px 0 32px;
+  padding-left: 0.5em;
+  color: var(--color-wordmark);
+  font-size: var(--font-size-title);
+  font-weight: 300;
+  letter-spacing: 0.5em;
+  text-align: center;
+}
+
+.auth-wordmark-ai {
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+.auth-card {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid var(--color-card-border);
+  border-radius: 24px;
+  background: var(--color-card);
+  padding: 32px 28px;
+  box-shadow: 0 30px 60px -30px #000, inset 0 1px 0 var(--color-card-highlight);
+}
+
+.auth-card::before,
+.auth-card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 2;
+  padding: 1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--diode-angle),
+    transparent 0 88%,
+    var(--color-diode-tail) 88%,
+    var(--color-accent) 94%,
+    var(--color-accent-light) 100%
+  );
+  opacity: var(--diode-alpha);
+  pointer-events: none;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: diode-angle 7s linear infinite, diode-alpha 7s linear infinite;
+}
+
+.auth-card::after {
+  opacity: calc(var(--diode-alpha) * 0.5);
+  filter: blur(6px);
+}
+
+.auth-card-body {
+  position: relative;
+  z-index: 1;
+}
+
+.auth-title {
+  margin: 0 0 24px;
+  color: var(--color-text);
+  font-size: var(--font-size-title-small);
+  font-weight: 500;
+  text-align: center;
+}
+
+.auth-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-note,
+.auth-field-error,
+.auth-form-error {
+  margin: 4px 0 0;
+  font-size: var(--font-size-hint);
+  text-align: center;
+}
+
+.auth-note {
+  color: var(--color-text-muted);
+}
+
+.auth-field-error,
+.auth-form-error {
+  color: var(--color-error);
+}
+
+.auth-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-submit {
+  width: 100%;
+  margin-top: 24px;
+}
+
+.auth-login {
+  margin: 24px 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body);
+  text-align: center;
+}
+
+.auth-login a {
+  color: var(--color-link);
+  text-decoration: underline;
+  text-decoration-color: var(--color-link-line);
+}
+
+.auth-login a:focus-visible {
+  outline: 2px solid var(--color-accent-light);
+  outline-offset: 2px;
+}
+
+@property --diode-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@property --diode-alpha {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@keyframes core-glow {
+  from {
+    box-shadow: 0 0 10px var(--color-core-glow);
+  }
+
+  to {
+    box-shadow: 0 0 24px var(--color-core-glow-strong);
+  }
+}
+
+@keyframes orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spark-twinkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes diode-angle {
+  0% {
+    --diode-angle: 0deg;
+  }
+
+  45% {
+    --diode-angle: 360deg;
+  }
+
+  100% {
+    --diode-angle: 360deg;
+  }
+}
+
+@keyframes diode-alpha {
+  0% {
+    --diode-alpha: 0;
+  }
+
+  6% {
+    --diode-alpha: 1;
+  }
+
+  39% {
+    --diode-alpha: 1;
+  }
+
+  45%,
+  100% {
+    --diode-alpha: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-core,
+  .brand-orbit,
+  .brand-spark,
+  .auth-card::before,
+  .auth-card::after {
+    animation: none;
+  }
+
+  .auth-card::before,
+  .auth-card::after {
+    opacity: 0;
+  }
+}

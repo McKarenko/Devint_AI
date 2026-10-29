@@ -402,33 +402,33 @@
     "semantic_hash": ""
   },
   ".ai/gpt.md": {
-    "mtime": 1793299780.1160188,
-    "seen": 1793300044.628812,
-    "ast_hash": "1f0473926ffb8ac91d22dfd736a5305e",
+    "mtime": 1793300051.2739477,
+    "seen": 1793301796.591605,
+    "ast_hash": "ddd09c08a74b2f2b3031dc0e75c63ef9",
     "semantic_hash": ""
   },
   ".ai/timework.md": {
-    "mtime": 1793299777.542108,
-    "seen": 1793300044.628814,
-    "ast_hash": "367e120063ec8b8d9c129178dad3f4fe",
+    "mtime": 1793300048.8307114,
+    "seen": 1793301796.591606,
+    "ast_hash": "98848609671d7c501f622e5fe32299b7",
     "semantic_hash": ""
   },
   "apps/web/src/app/(auth)/layout.tsx": {
-    "mtime": 1793223248.4182367,
-    "seen": 1793223775.662488,
-    "ast_hash": "b64937340d37004e133e5c144bbb6d54",
+    "mtime": 1793301331.07376,
+    "seen": 1793301796.5903559,
+    "ast_hash": "3e23c5f4dbda982bac420b49709eb339",
     "semantic_hash": ""
   },
   "apps/web/src/app/(auth)/login/login-form.tsx": {
-    "mtime": 1793223297.7163358,
-    "seen": 1793223775.6624901,
-    "ast_hash": "cca8d238b3794fbfad3396052c088a83",
+    "mtime": 1793301334.0825062,
+    "seen": 1793301796.590357,
+    "ast_hash": "703fa9335fad40c77bd85c303debf57f",
     "semantic_hash": ""
   },
   "apps/web/src/app/(auth)/login/page.tsx": {
-    "mtime": 1793223285.7306123,
-    "seen": 1793223775.6624908,
-    "ast_hash": "9b7222ed4cc0ea44b66ee054e06c0799",
+    "mtime": 1793301350.4255044,
+    "seen": 1793301796.590359,
+    "ast_hash": "fa5497718fd5ebe1340d34135d7be169",
     "semantic_hash": ""
   },
   "apps/web/src/app/(auth)/register/page.tsx": {
@@ -450,21 +450,27 @@
     "semantic_hash": ""
   },
   "apps/web/src/components/auth/auth-stage.tsx": {
-    "mtime": 1793293936.644713,
-    "seen": 1793294087.2696052,
-    "ast_hash": "3082f34cc4d4bfcc0a13ce1b06a52a85",
+    "mtime": 1793301535.972257,
+    "seen": 1793301796.590743,
+    "ast_hash": "81369261e0c89b9e6733e116deda1bc0",
     "semantic_hash": ""
   },
   "apps/web/src/components/auth/auth-switch-link.tsx": {
-    "mtime": 1793223247.4005804,
-    "seen": 1793223775.662591,
-    "ast_hash": "a9ca50743f78c54041ddca68c80d5489",
+    "mtime": 1793301363.32873,
+    "seen": 1793301796.590744,
+    "ast_hash": "cb73be002b9e053fba23c42baae9fdce",
     "semantic_hash": ""
   },
   "apps/web/src/middleware.ts": {
     "mtime": 1793299986.185425,
     "seen": 1793300044.628042,
     "ast_hash": "f488ae49f3fac032707657d89f1e00b7",
+    "semantic_hash": ""
+  },
+  "apps/web/src/app/(auth)/login/reset-request-form.tsx": {
+    "mtime": 1793301348.5780056,
+    "seen": 1793301796.590361,
+    "ast_hash": "583cae8d3e0b46599d97be8a0b3a6d7b",
     "semantic_hash": ""
   },
   "pnpm-lock.yaml": {

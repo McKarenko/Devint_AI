@@ -21,7 +21,8 @@
   "19": "password-policy.ts",
   "20": "cleanup.ts",
   "21": "Сторонние списки",
-  "23": "registerAuthRoutes",
+  "22": "conor-face.tsx",
+  "23": "eslint.config.mjs",
   "24": "handoff.sh",
   "25": "throttle.ts",
   "26": "offer-draft-1.md",
@@ -31,5 +32,9 @@
   "30": "cursor.md",
   "31": "gpt.md",
   "32": "timework.md",
-  "33": "auth-stage.tsx"
+  "33": "auth-stage.tsx",
+  "34": "next",
+  "35": "dependencies",
+  "36": "scripts",
+  "37": "middleware.ts"
 }

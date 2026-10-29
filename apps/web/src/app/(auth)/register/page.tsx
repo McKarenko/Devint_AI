@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs"
 import { join } from "node:path"
 
-import { AuthShell } from "@/components/auth/auth-shell"
+import { AuthCard } from "@/components/auth/auth-card"
 import { RegisterForm } from "./register-form"
 
 /** Читает черновик документа. Папка лежит в корне репозитория. */
@@ -12,8 +12,8 @@ function readLegal(fileName: string) {
 /** Страница регистрации. Тексты документов читаются на сервере. */
 export default function RegisterPage() {
   return (
-    <AuthShell>
+    <AuthCard>
       <RegisterForm offerText={readLegal("offer-draft-1.md")} privacyText={readLegal("privacy-draft-1.md")} />
-    </AuthShell>
+    </AuthCard>
   )
 }

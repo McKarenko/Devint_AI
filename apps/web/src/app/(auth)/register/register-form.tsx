@@ -4,6 +4,7 @@ import { useRef, useState, type FormEvent, type MouseEvent } from "react"
 
 import { Button, Checkbox, Dialog, DialogContent, Input, PasswordInput } from "@devint_ai/ui"
 
+import { AuthSwitchLink } from "@/components/auth/auth-switch-link"
 import { offerVersion, privacyVersion } from "@/legal-versions"
 import { birthDateError, emailError, maskBirthDate, passwordLengthError, toIsoDate } from "./register-rules"
 
@@ -254,7 +255,7 @@ function RegisterForm({ offerText, privacyText }: RegisterFormProps) {
           {pending ? "Отправляем…" : "Зарегистрироваться"}
         </Button>
         <p className="auth-login">
-          Уже есть аккаунт? <a href="/login">Войти</a>
+          Уже есть аккаунт? <AuthSwitchLink href="/login">Войти</AuthSwitchLink>
         </p>
       </form>
 

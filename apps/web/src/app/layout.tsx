@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next"
+import { headers } from "next/headers"
 import localFont from "next/font/local"
 
 import "./globals.css"
@@ -23,11 +24,14 @@ export const viewport: Viewport = {
 }
 
 /** Корневой layout приложения. */
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  // Запрос нужен Next, чтобы подписать скрипты одноразовым кодом из CSP.
+  await headers()
+
   return (
     <html lang="ru">
       <body className={`${montserrat.variable} antialiased`}>

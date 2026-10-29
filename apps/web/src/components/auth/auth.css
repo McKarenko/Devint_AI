@@ -99,7 +99,20 @@
   font-weight: 500;
 }
 
+.auth-card-slot {
+  width: 100%;
+  max-width: 400px;
+  perspective: 1000px;
+}
+
 .auth-card {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --tilt-shadow-x: 0;
+  --tilt-shadow-y: 30;
+  --glow-x: 50%;
+  --glow-y: 50%;
+  --glow-alpha: 0;
   position: relative;
   width: 100%;
   max-width: 400px;
@@ -107,7 +120,39 @@
   border-radius: 24px;
   background: var(--color-card);
   padding: 32px 28px;
-  box-shadow: 0 30px 60px -30px #000, inset 0 1px 0 var(--color-card-highlight);
+  box-shadow:
+    calc(var(--tilt-shadow-x) * 1px) calc(var(--tilt-shadow-y) * 1px) 60px -30px #000,
+    inset 0 1px 0 var(--color-card-highlight);
+  transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+  transition:
+    transform 120ms ease-out,
+    box-shadow 120ms ease-out;
+}
+
+.auth-card.is-resting {
+  transition:
+    transform 450ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 450ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.auth-card.is-flat,
+.auth-card.is-flat .auth-card-light {
+  transition: none;
+}
+
+.auth-card-light {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--glow-x) var(--glow-y), var(--color-accent), transparent 42%);
+  opacity: calc(var(--glow-alpha) * 0.14);
+  pointer-events: none;
+  transition: opacity 120ms ease-out;
+}
+
+.auth-card.is-resting .auth-card-light {
+  transition: opacity 450ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .auth-card::before,
@@ -202,6 +247,47 @@
   outline-offset: 2px;
 }
 
+.auth-stage {
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-stage.is-moving {
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.auth-stage-leave-register .auth-card-slot {
+  animation: auth-card-leave-left 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.auth-stage-enter-register .auth-card-slot {
+  animation: auth-card-enter-right 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.auth-stage-leave-login .auth-card-slot {
+  animation: auth-card-leave-right 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.auth-stage-enter-login .auth-card-slot {
+  animation: auth-card-enter-left 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.auth-forgot {
+  display: block;
+  margin: 16px 0 0;
+  color: var(--color-link);
+  font-size: var(--font-size-body);
+  text-align: center;
+  text-decoration: underline;
+  text-decoration-color: var(--color-link-line);
+}
+
+.auth-forgot:focus-visible {
+  outline: 2px solid var(--color-accent-light);
+  outline-offset: 2px;
+}
+
 @property --diode-angle {
   syntax: "<angle>";
   inherits: false;
@@ -243,6 +329,54 @@
   }
 }
 
+@keyframes auth-card-leave-left {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(-110%);
+  }
+}
+
+@keyframes auth-card-enter-right {
+  from {
+    opacity: 0;
+    transform: translateX(110%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes auth-card-leave-right {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(110%);
+  }
+}
+
+@keyframes auth-card-enter-left {
+  from {
+    opacity: 0;
+    transform: translateX(-110%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 @keyframes diode-angle {
   0% {
     --diode-angle: 0deg;
@@ -281,12 +415,21 @@
   .brand-orbit,
   .brand-spark,
   .auth-card::before,
-  .auth-card::after {
+  .auth-card::after,
+  .auth-stage-leave-register .auth-card-slot,
+  .auth-stage-enter-register .auth-card-slot,
+  .auth-stage-leave-login .auth-card-slot,
+  .auth-stage-enter-login .auth-card-slot {
     animation: none;
   }
 
+  .auth-card {
+    transform: none;
+  }
+
   .auth-card::before,
-  .auth-card::after {
+  .auth-card::after,
+  .auth-card-light {
     opacity: 0;
   }
 }

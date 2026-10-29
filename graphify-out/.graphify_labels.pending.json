@@ -21,7 +21,6 @@
   "19": "password-policy.ts",
   "20": "cleanup.ts",
   "21": "Сторонние списки",
-  "22": "register/page.tsx",
   "23": "registerAuthRoutes",
   "24": "handoff.sh",
   "25": "throttle.ts",
@@ -32,6 +31,5 @@
   "30": "cursor.md",
   "31": "gpt.md",
   "32": "timework.md",
-  "33": "auth-stage.tsx",
-  "34": "password.ts"
+  "33": "auth-stage.tsx"
 }

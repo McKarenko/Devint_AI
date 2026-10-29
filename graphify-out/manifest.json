@@ -36,9 +36,9 @@
     "semantic_hash": "f1e80e839db34357a0e228efe227e759"
   },
   "apps/web/next.config.ts": {
-    "mtime": 1793207936.2923357,
-    "seen": 1793217491.303989,
-    "ast_hash": "85045dfb2cba7bd31102c572bad1a89c",
+    "mtime": 1793298659.6050835,
+    "seen": 1793299135.71403,
+    "ast_hash": "24887fe0d38d8e36ccedbc873769df2e",
     "semantic_hash": ""
   },
   "apps/web/package.json": {
@@ -54,9 +54,9 @@
     "semantic_hash": "675899342e765a4d16acd75a53389101"
   },
   "apps/web/src/app/layout.tsx": {
-    "mtime": 1793207936.4142098,
-    "seen": 1793217491.3040152,
-    "ast_hash": "c4f4a51d8d2fa659acb1c5cfc7c8f120",
+    "mtime": 1793298874.3312104,
+    "seen": 1793299135.714439,
+    "ast_hash": "42ed15a4b9ead02ce4a7c18fbdcce8b5",
     "semantic_hash": ""
   },
   "apps/web/src/app/page.tsx": {
@@ -372,9 +372,9 @@
     "semantic_hash": ""
   },
   ".cursor/documentations/risks.md": {
-    "mtime": 1793217468.765934,
-    "seen": 1793217491.3041742,
-    "ast_hash": "6bd19ef494a9e45c686dfbeb5cbfbabb",
+    "mtime": 1793299114.0752134,
+    "seen": 1793299135.715502,
+    "ast_hash": "2425d72ae151ca16988cfac24966ac7b",
     "semantic_hash": ""
   },
   "apps/api/drizzle/meta/0006_snapshot.json": {
@@ -402,15 +402,15 @@
     "semantic_hash": ""
   },
   ".ai/gpt.md": {
-    "mtime": 1793294113.1379879,
-    "seen": 1793297745.5987,
-    "ast_hash": "af5902a4209cde36022557b1a1e8d283",
+    "mtime": 1793299118.802854,
+    "seen": 1793299135.715462,
+    "ast_hash": "c1dec62f5adf5b38673b6f56175b2c7e",
     "semantic_hash": ""
   },
   ".ai/timework.md": {
-    "mtime": 1793294109.9148605,
-    "seen": 1793297745.5987022,
-    "ast_hash": "d4dc336a2eca587ad78e2b1f83f7af85",
+    "mtime": 1793299116.3175023,
+    "seen": 1793299135.715463,
+    "ast_hash": "d6f5a3fb51b8e6e04b6b6fa60290eaec",
     "semantic_hash": ""
   },
   "apps/web/src/app/(auth)/layout.tsx": {
@@ -459,6 +459,12 @@
     "mtime": 1793223247.4005804,
     "seen": 1793223775.662591,
     "ast_hash": "a9ca50743f78c54041ddca68c80d5489",
+    "semantic_hash": ""
+  },
+  "apps/web/src/middleware.ts": {
+    "mtime": 1793298649.0317466,
+    "seen": 1793299135.7147899,
+    "ast_hash": "71e180440783f48328756e908ac3df65",
     "semantic_hash": ""
   },
   "pnpm-lock.yaml": {

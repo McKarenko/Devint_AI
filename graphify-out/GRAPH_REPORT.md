@@ -1,17 +1,17 @@
 # Graph Report - Devint_AI  (2026-10-29)
 
 ## Corpus Check
-- 79 files · ~32,812 words
+- 79 files · ~33,250 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 11 file(s) not represented in the graph (top: (none) 5, .css 3, .mdc 1)
 
 ## Summary
-- 522 nodes · 885 edges · 30 communities (20 shown, 10 thin omitted)
+- 528 nodes · 897 edges · 35 communities (25 shown, 10 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ebb8f8a6`
+- Built from commit: `4a4dfcf0`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -26,6 +26,7 @@
 - scripts
 - conor-face.tsx
 - db
+- session.ts
 - auth.ts
 - context7
 - server.ts
@@ -33,12 +34,16 @@
 - pnpm-workspace.yaml
 - compilerOptions
 - password-policy.ts
+- cleanup.ts
 - Сторонние списки
+- register/page.tsx
+- registerAuthRoutes
 - handoff.sh
 - throttle.ts
 - offer-draft-1.md
 - privacy-draft-1.md
 - auth-stage.tsx
+- password.ts
 
 ## God Nodes (most connected - your core abstractions)
 1. `registerAuthRoutes()` - 38 edges
@@ -67,19 +72,19 @@
 ## Import Cycles
 - None detected.
 
-## Communities (30 total, 10 thin omitted)
+## Communities (35 total, 10 thin omitted)
 
 ### Community 0 - "web/package.json"
 Cohesion: 0.06
 Nodes (39): compat, __dirname, eslintConfig, __filename, dependencies, @devint_ai/ui@workspace:*, react@19.1.0, react-dom@19.1.0 (+31 more)
 
 ### Community 1 - "ui/package.json"
-Cohesion: 0.07
-Nodes (34): dependencies, class-variance-authority@^0.7.1, clsx@^2.1.1, lucide-react@^1.62.0, @radix-ui/react-dialog@^1.3.1, @radix-ui/react-slot@^1.2.3, tailwind-merge@^3.3.1, devDependencies (+26 more)
+Cohesion: 0.08
+Nodes (33): dependencies, class-variance-authority@^0.7.1, clsx@^2.1.1, @radix-ui/react-dialog@^1.3.1, @radix-ui/react-slot@^1.2.3, tailwind-merge@^3.3.1, devDependencies, @types/react@^19.1.8 (+25 more)
 
 ### Community 2 - "api/package.json"
 Cohesion: 0.06
-Nodes (43): drizzleConfig, dependencies, drizzle-orm@^0.45.4, fastify@^5.12.7, @fastify/cookie@^11.1.5, @fastify/cors@^11.3.1, @fastify/helmet@^13.2.0, @fastify/rate-limit@^11.2.1 (+35 more)
+Nodes (42): drizzleConfig, dependencies, drizzle-orm@^0.45.4, fastify@^5.12.7, @fastify/cookie@^11.1.5, @fastify/cors@^11.3.1, @fastify/helmet@^13.2.0, @fastify/rate-limit@^11.2.1 (+34 more)
 
 ### Community 3 - "compilerOptions"
 Cohesion: 0.18
@@ -103,23 +108,27 @@ Nodes (18): engines, node, name, postcss, packageManager, pnpm, overrides, priva
 
 ### Community 8 - "conor-face.tsx"
 Cohesion: 0.06
-Nodes (53): LoginForm(), onSubmit(), loginPasswordError(), LoginPage(), readLegal(), RegisterPage(), RegisterForm(), onSubmit() (+45 more)
+Nodes (50): LoginForm(), onSubmit(), loginPasswordError(), RegisterForm(), onSubmit(), RegisterFormProps, birthDateError(), emailError() (+42 more)
 
 ### Community 9 - "db"
 Cohesion: 0.17
 Nodes (11): environment, image, ports, volumes, POSTGRES_DB, POSTGRES_PASSWORD, POSTGRES_USER, services (+3 more)
 
+### Community 10 - "session.ts"
+Cohesion: 0.16
+Nodes (21): ActiveSession, clearSessionCookie(), cookieMaxAgeForNewSession(), cookieMaxAgeSeconds(), createSession(), createSessionToken(), findActiveSession(), hashSessionToken() (+13 more)
+
 ### Community 11 - "auth.ts"
-Cohesion: 0.05
-Nodes (67): alreadyRegisteredLetter(), createEmailToken(), EmailToken, hashEmailToken(), MailLetter, passwordChangedLetter(), resetPasswordLetter(), sendMail() (+59 more)
+Cohesion: 0.09
+Nodes (27): alreadyRegisteredLetter(), createEmailToken(), EmailToken, hashEmailToken(), MailLetter, passwordChangedLetter(), resetPasswordLetter(), sendMail() (+19 more)
 
 ### Community 12 - "context7"
 Cohesion: 0.33
 Nodes (5): context7, graphify, npx, /Users/Vladimir/.local/bin/graphify-mcp, @upstash/context7-mcp
 
 ### Community 13 - "server.ts"
-Cohesion: 0.18
-Nodes (20): isMailMode(), isNodeEnv(), MailMode, mailModeValues, NodeEnv, nodeEnvValues, readApiConfig(), readApiHost() (+12 more)
+Cohesion: 0.16
+Nodes (22): startAccountCleanup(), ApiConfig, isMailMode(), isNodeEnv(), MailMode, mailModeValues, NodeEnv, nodeEnvValues (+14 more)
 
 ### Community 16 - "compilerOptions"
 Cohesion: 0.22
@@ -129,13 +138,25 @@ Nodes (8): compilerOptions, baseUrl, jsx, lib, paths, extends, include, ../../co
 Cohesion: 0.15
 Nodes (14): applyLookalikes(), birthDateForms(), dataDirectory, isListedPassword(), isRepeatedCharacter(), isSimpleSequence(), loadPasswordLists(), readPasswordFile() (+6 more)
 
+### Community 20 - "cleanup.ts"
+Cohesion: 0.26
+Nodes (11): CleanupLog, authEvents, emailTokens, legalAcceptances, loginFailures, mailEvents, passwordCredentials, sessions (+3 more)
+
+### Community 22 - "register/page.tsx"
+Cohesion: 0.29
+Nodes (10): LoginPage(), readLegal(), RegisterPage(), AuthCard(), onPointerLeave(), onPointerMove(), layFlat(), prefersReducedMotion() (+2 more)
+
+### Community 23 - "registerAuthRoutes"
+Cohesion: 0.20
+Nodes (10): acceptanceRows(), canSendMail(), fullYears(), InvalidTokenError, isAllowedBirthDate(), isRealCalendarDate(), isUniqueViolation(), moscowToday() (+2 more)
+
 ### Community 24 - "handoff.sh"
 Cohesion: 0.52
 Nodes (6): filter_stat(), is_blocked_path(), is_sensitive_key(), report_secret(), handoff.sh script, TZ
 
 ### Community 25 - "throttle.ts"
-Cohesion: 0.10
-Nodes (32): CleanupLog, runAccountCleanup(), startAccountCleanup(), getDatabase(), authEvents, emailTokens, legalAcceptances, loginFailures (+24 more)
+Cohesion: 0.15
+Nodes (21): runAccountCleanup(), getDatabase(), attemptKey(), AuthEventKind, checkLoginThrottle(), clearEmailAndPairFailures(), clearPairFailures(), DbTransaction (+13 more)
 
 ### Community 26 - "offer-draft-1.md"
 Cohesion: 0.33
@@ -149,6 +170,10 @@ Nodes (5): Какие данные собираются, Контакты, Пр�
 Cohesion: 0.13
 Nodes (15): next@^15.5.7, AuthLayout(), metadata, montserrat, viewport, AuthShell(), AuthStage(), onSwitch() (+7 more)
 
+### Community 34 - "password.ts"
+Cohesion: 0.33
+Nodes (8): acquireHashSlot(), hashPassword(), HashQueueFullError, hashWaiters, prepareDummyPasswordHash(), readDummyPasswordHash(), releaseHashSlot(), verifyPassword()
+
 ## Knowledge Gaps
 - **6 isolated node(s):** `npx`, `@upstash/context7-mcp`, `/Users/Vladimir/.local/bin/graphify-mcp`, `../../config/tsconfig.base.json`, `../../config/tsconfig.base.json` (+1 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 212 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
@@ -158,16 +183,16 @@ Nodes (15): next@^15.5.7, AuthLayout(), metadata, montserrat, viewport, AuthShel
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `next` connect `auth-stage.tsx` to `web/package.json`, `password-policy.ts`?**
-  _High betweenness centrality (0.143) - this node is a cross-community bridge._
+  _High betweenness centrality (0.142) - this node is a cross-community bridge._
 - **What connects `npx`, `@upstash/context7-mcp`, `/Users/Vladimir/.local/bin/graphify-mcp` to the rest of the system?**
   _6 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `web/package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.059800664451827246 - nodes in this community are weakly interconnected._
-- **Why does `drizzle-orm` connect `throttle.ts` to `api/package.json`, `auth.ts`, `server.ts`?**
-  _High betweenness centrality (0.035) - this node is a cross-community bridge._
+- **Why does `RegisterForm()` connect `conor-face.tsx` to `register/page.tsx`?**
+  _High betweenness centrality (0.039) - this node is a cross-community bridge._
 - **Should `ui/package.json` be split into smaller, more focused modules?**
-  _Cohesion score 0.07394957983193277 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0766488413547237 - nodes in this community are weakly interconnected._
+- **Why does `drizzle-orm` connect `cleanup.ts` to `api/package.json`, `session.ts`, `auth.ts`, `server.ts`, `throttle.ts`?**
+  _High betweenness centrality (0.035) - this node is a cross-community bridge._
 - **Should `api/package.json` be split into smaller, more focused modules?**
-  _Cohesion score 0.060129509713228495 - nodes in this community are weakly interconnected._
-- **Should `compilerOptions` be split into smaller, more focused modules?**
-  _Cohesion score 0.10526315789473684 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06183574879227053 - nodes in this community are weakly interconnected._

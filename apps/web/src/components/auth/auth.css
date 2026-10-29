@@ -212,10 +212,6 @@
   pointer-events: none;
 }
 
-.auth-stage-ghost {
-  width: 100%;
-}
-
 .auth-stage-leave-register .auth-card {
   animation: auth-card-leave-left 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }

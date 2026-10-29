@@ -126,9 +126,9 @@
     "semantic_hash": ""
   },
   ".cursor/documentations/rules.md": {
-    "mtime": 1793223103.3822565,
-    "seen": 1793223775.663147,
-    "ast_hash": "df291ed657c1915cb1d6c86d05572ad2",
+    "mtime": 1793293936.6447594,
+    "seen": 1793294087.271845,
+    "ast_hash": "031ec18a7421f5f2d75f346200287d52",
     "semantic_hash": ""
   },
   "packages/ui/src/conor-face.tsx": {
@@ -402,15 +402,15 @@
     "semantic_hash": ""
   },
   ".ai/gpt.md": {
-    "mtime": 1793223103.3952272,
-    "seen": 1793223775.663093,
-    "ast_hash": "2fccd51b325c345936aae0ec034f0d37",
+    "mtime": 1793223835.3435793,
+    "seen": 1793294087.271693,
+    "ast_hash": "ec9f2b734722b023106c3ed84cb99eb3",
     "semantic_hash": ""
   },
   ".ai/timework.md": {
-    "mtime": 1793223103.3954997,
-    "seen": 1793223775.663094,
-    "ast_hash": "5e82395b6ceae8a0b46de2aff72d2a8d",
+    "mtime": 1793223832.9162774,
+    "seen": 1793294087.2716959,
+    "ast_hash": "28eccc417a1bdc65fee64972921581fa",
     "semantic_hash": ""
   },
   "apps/web/src/app/(auth)/layout.tsx": {
@@ -450,9 +450,9 @@
     "semantic_hash": ""
   },
   "apps/web/src/components/auth/auth-stage.tsx": {
-    "mtime": 1793223684.248532,
-    "seen": 1793223775.66259,
-    "ast_hash": "4f824ad1d9325f8ead6055374c03935c",
+    "mtime": 1793293936.644713,
+    "seen": 1793294087.2696052,
+    "ast_hash": "3082f34cc4d4bfcc0a13ce1b06a52a85",
     "semantic_hash": ""
   },
   "apps/web/src/components/auth/auth-switch-link.tsx": {

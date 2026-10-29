@@ -3,27 +3,16 @@
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useRef, useState, type ReactNode } from "react"
 
-/** Снимок уезжающей карточки. Нужен, когда адрес уже сменился, а картинку ещё надо доиграть. */
-function AuthCardGhost({ node }: { node: HTMLElement }) {
-  return (
-    <div
-      className="auth-stage-ghost"
-      ref={(host) => {
-        if (host && host.firstChild !== node) {
-          host.replaceChildren(node)
-        }
-      }}
-    />
-  )
-}
-
 /** Сколько миллисекунд карточка уезжает и сколько приезжает. */
 const motionMs = 340
+
+/** Если адрес так и не сменился, сцену всё равно отпускаем. */
+const unlockMs = motionMs + 800
 
 /** Куда едет карточка относительно входа и регистрации. */
 type MotionDirection = "to-register" | "to-login"
 
-/** Покой, уезд старой карточки или приезд новой. */
+/** Покой, уезд текущей карточки или приезд новой. */
 type MotionPhase = "idle" | "leave" | "enter"
 
 /** Регистрация приезжает справа. Вход приезжает слева. */
@@ -52,78 +41,53 @@ function motionClass(phase: MotionPhase, direction: MotionDirection) {
   return ""
 }
 
+/** Браузер просит обойтись без движения. */
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches
+}
+
 /** Держит карточку на месте, пока адрес меняется. Логотип выше этой сцены не трогает. */
 function AuthStage({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const router = useRouter()
-  /** Карточка, которую человек ещё видит. */
-  const [shown, setShown] = useState(children)
-  /** Уезд или приезд. */
+  /** Корень сцены. С него ставим фокус после перехода. */
+  const stageRef = useRef<HTMLDivElement>(null)
+  /** Фаза, которую видит обработчик клика. Состояние к тому моменту может быть старым. */
+  const phaseRef = useRef<MotionPhase>("idle")
+  /** Адрес, куда клик ещё только собирается перейти. Назад его не ждёт. */
+  const pendingTarget = useRef<string | null>(null)
+  /** Адрес, под который уже подогнана сцена. */
+  const [shownPath, setShownPath] = useState(pathname)
+  /** Уезд или приезд. Назад и вперёд сразу ставят покой. */
   const [phase, setPhase] = useState<MotionPhase>("idle")
-  /** Сторона текущего движения. */
+  /** Сторона текущего клика. */
   const [direction, setDirection] = useState<MotionDirection>("to-register")
-  /** Адрес уже показанной карточки. */
-  const shownPath = useRef(pathname)
-  /** Адрес, к которому идём. */
-  const targetPath = useRef<string | null>(null)
-  /** Уезд уже доигран, новая карточка ещё не поставлена. */
-  const leaveFinished = useRef(false)
-  /** Пока идёт переход, второй клик его не перебивает. */
-  const moving = useRef(false)
-  /** Последние дети страницы. Нужны в таймере, где замыкание уже старое. */
-  const latestChildren = useRef(children)
-  /** Последний адрес. Тоже для таймера. */
-  const latestPath = useRef(pathname)
-  /** Снимок карточки для кнопок браузера. По ссылке он не нужен: адрес меняется после уезда. */
-  const [ghost, setGhost] = useState<HTMLElement | null>(null)
+  /** После перехода нужно поставить фокус в новую форму. */
+  const [focusPending, setFocusPending] = useState(false)
 
-  latestChildren.current = children
-  latestPath.current = pathname
+  phaseRef.current = phase
 
-  /** Ставит новую карточку и запускает её приезд. */
-  function showArrived(node: ReactNode, path: string) {
-    shownPath.current = path
-    targetPath.current = null
-    leaveFinished.current = false
-    setGhost(null)
-    setShown(node)
-    setPhase("enter")
+  if (pathname !== shownPath) {
+    /** Этот переход начат кликом, а не кнопкой истории. */
+    const fromClick = pendingTarget.current === pathname
+
+    if (!fromClick) {
+      pendingTarget.current = null
+    }
+
+    setShownPath(pathname)
+    setPhase(fromClick && !prefersReducedMotion() ? "enter" : "idle")
+    setFocusPending(true)
   }
 
   useEffect(() => {
-    /** Назад и вперёд меняют адрес сразу. Снимок снимаем, пока старая карточка ещё в дереве. */
-    function onPop() {
-      if (moving.current) {
-        return
-      }
-
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        return
-      }
-
-      /** Карточка, которая ещё на экране. */
-      const card = document.querySelector(".auth-card")
-
-      if (!card) {
-        return
-      }
-
-      /** Новый адрес уже записан браузером. */
-      const nextPath = window.location.pathname
-
-      moving.current = true
-      targetPath.current = nextPath
-      setDirection(directionFor(nextPath))
-      setGhost(card.cloneNode(true) as HTMLElement)
-      setPhase("leave")
+    if (pendingTarget.current === pathname) {
+      pendingTarget.current = null
     }
-
-    window.addEventListener("popstate", onPop)
-    return () => window.removeEventListener("popstate", onPop)
-  }, [])
+  }, [pathname])
 
   useEffect(() => {
-    /** Клик по ссылке входа или регистрации. Обычный переход ждёт конца уезда. */
+    /** Клик по ссылке входа или регистрации. Адрес меняется только после уезда. */
     function onSwitch(event: Event) {
       /** Куда просят перейти. */
       const href = (event as CustomEvent<string>).detail
@@ -132,15 +96,14 @@ function AuthStage({ children }: { children: ReactNode }) {
         return
       }
 
-      if (moving.current || href === shownPath.current) {
+      if (phaseRef.current !== "idle" || href === pathname) {
         return
       }
 
-      moving.current = true
-      targetPath.current = href
+      pendingTarget.current = href
       setDirection(directionFor(href))
 
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (prefersReducedMotion()) {
         router.push(href)
         return
       }
@@ -150,71 +113,39 @@ function AuthStage({ children }: { children: ReactNode }) {
 
     window.addEventListener("auth-switch", onSwitch)
     return () => window.removeEventListener("auth-switch", onSwitch)
-  }, [router])
-
-  useEffect(() => {
-    if (pathname === shownPath.current) {
-      return
-    }
-
-    if (phase === "leave" && !leaveFinished.current) {
-      return
-    }
-
-    if (leaveFinished.current && targetPath.current === pathname) {
-      showArrived(children, pathname)
-      return
-    }
-
-    if (targetPath.current === pathname && phase === "leave") {
-      return
-    }
-
-    if (targetPath.current === pathname && phase === "idle") {
-      shownPath.current = pathname
-      targetPath.current = null
-      moving.current = false
-      setShown(children)
-      return
-    }
-
-    if (!targetPath.current && phase === "idle") {
-      moving.current = true
-      targetPath.current = pathname
-      setDirection(directionFor(pathname))
-
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        shownPath.current = pathname
-        targetPath.current = null
-        moving.current = false
-        setShown(children)
-        return
-      }
-
-      setPhase("leave")
-    }
-  }, [pathname, children, phase])
+  }, [pathname, router])
 
   useEffect(() => {
     if (phase !== "leave") {
       return
     }
 
-    /** Конец уезда. Событие анимации рамки сюда не подходит: оно срабатывает само по себе. */
-    const timer = window.setTimeout(() => {
-      leaveFinished.current = true
-      /** Куда должны приехать. */
-      const target = targetPath.current
+    /** Куда должны приехать. Пустое значение значит, что переход уже отменили. */
+    const target = pendingTarget.current
 
-      if (target && latestPath.current !== target) {
-        router.push(target)
-        return
-      }
+    if (!target) {
+      setPhase("idle")
+      return
+    }
 
-      showArrived(latestChildren.current, latestPath.current)
+    /** Смена адреса после уезда. */
+    const pushTimer = window.setTimeout(() => {
+      router.push(target)
     }, motionMs)
 
-    return () => window.clearTimeout(timer)
+    /** Запасной выход, если адрес так и не сменился. */
+    const unlockTimer = window.setTimeout(() => {
+      if (pendingTarget.current === target) {
+        pendingTarget.current = null
+      }
+
+      setPhase((current) => (current === "leave" ? "idle" : current))
+    }, unlockMs)
+
+    return () => {
+      window.clearTimeout(pushTimer)
+      window.clearTimeout(unlockTimer)
+    }
   }, [phase, router])
 
   useEffect(() => {
@@ -222,21 +153,46 @@ function AuthStage({ children }: { children: ReactNode }) {
       return
     }
 
-    /** Конец приезда. После него ссылки снова можно нажимать. */
+    /** Конец приезда. Дальше форму снова можно нажать. */
     const timer = window.setTimeout(() => {
-      moving.current = false
       setPhase("idle")
     }, motionMs)
 
     return () => window.clearTimeout(timer)
   }, [phase])
 
+  useEffect(() => {
+    if (phase !== "idle" || !focusPending) {
+      return
+    }
+
+    setFocusPending(false)
+
+    /** Куда поставить фокус. Сначала поле, если его ещё нет — заголовок. */
+    const field = stageRef.current?.querySelector("input")
+    if (field instanceof HTMLElement) {
+      field.focus()
+      return
+    }
+
+    /** Заголовок новой карточки. */
+    const heading = stageRef.current?.querySelector("h1")
+    if (heading instanceof HTMLElement) {
+      heading.tabIndex = -1
+      heading.focus()
+    }
+  }, [phase, focusPending])
+
   /** Класс сцены: движение или покой. */
   const className = ["auth-stage", phase === "idle" ? "" : "is-moving", motionClass(phase, direction)]
     .filter(Boolean)
     .join(" ")
 
-  return <div className={className}>{phase === "leave" && ghost ? <AuthCardGhost node={ghost} /> : shown}</div>
+  return (
+    <div ref={stageRef} className={className} inert={phase !== "idle"}>
+      {children}
+    </div>
+  )
 }
 
 export { AuthStage }

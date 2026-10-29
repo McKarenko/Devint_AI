@@ -27,8 +27,9 @@ type ApiErrorBody = {
 
 /** Собирает приложение и возвращает его. Слушать порт здесь нельзя. */
 async function buildApiApp(config: ApiConfig): Promise<FastifyInstance> {
-  /** Приложение Fastify. trustProxy не включаем: это появится вместе с Nginx. */
+  /** Приложение Fastify. Адрес клиента из заголовка берём только если задан адрес Nginx. */
   const app = Fastify({
+    trustProxy: config.trustedProxy ?? false,
     bodyLimit: maxBodyBytes,
     requestTimeout: requestTimeoutMs,
     ajv: {

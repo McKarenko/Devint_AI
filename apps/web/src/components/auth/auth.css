@@ -41,7 +41,7 @@
   border: 1px solid var(--color-core-border);
   border-radius: 50%;
   background: var(--color-core);
-  animation: core-glow 3s ease-in-out infinite alternate;
+  box-shadow: 0 0 18px var(--color-core-glow-strong);
 }
 
 .brand-core-sphere {
@@ -155,31 +155,39 @@
   transition: opacity 450ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.auth-card::before,
-.auth-card::after {
-  content: "";
+.auth-card-diode {
   position: absolute;
   inset: -1px;
   z-index: 2;
   padding: 1px;
+  overflow: hidden;
   border-radius: inherit;
+  pointer-events: none;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+.auth-card-diode-glow {
+  opacity: 0.5;
+  filter: blur(6px);
+}
+
+.auth-card-diode-beam {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1600px;
+  height: 1600px;
+  margin-top: -800px;
+  margin-left: -800px;
   background: conic-gradient(
-    from var(--diode-angle),
+    from 0deg,
     transparent 0 88%,
     var(--color-diode-tail) 88%,
     var(--color-accent) 94%,
     var(--color-accent-light) 100%
   );
-  opacity: var(--diode-alpha);
-  pointer-events: none;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  animation: diode-angle 7s linear infinite, diode-alpha 7s linear infinite;
-}
-
-.auth-card::after {
-  opacity: calc(var(--diode-alpha) * 0.5);
-  filter: blur(6px);
+  animation: diode-spin 7s linear infinite, diode-fade 7s linear infinite;
 }
 
 .auth-card-body {
@@ -288,28 +296,6 @@
   outline-offset: 2px;
 }
 
-@property --diode-angle {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
-}
-
-@property --diode-alpha {
-  syntax: "<number>";
-  inherits: false;
-  initial-value: 0;
-}
-
-@keyframes core-glow {
-  from {
-    box-shadow: 0 0 10px var(--color-core-glow);
-  }
-
-  to {
-    box-shadow: 0 0 24px var(--color-core-glow-strong);
-  }
-}
-
 @keyframes orbit-spin {
   to {
     transform: rotate(360deg);
@@ -377,45 +363,52 @@
   }
 }
 
-@keyframes diode-angle {
+@keyframes diode-spin {
   0% {
-    --diode-angle: 0deg;
+    transform: rotate(0deg);
   }
 
   45% {
-    --diode-angle: 360deg;
+    transform: rotate(360deg);
   }
 
   100% {
-    --diode-angle: 360deg;
+    transform: rotate(360deg);
   }
 }
 
-@keyframes diode-alpha {
+@keyframes diode-fade {
   0% {
-    --diode-alpha: 0;
+    opacity: 0;
   }
 
   6% {
-    --diode-alpha: 1;
+    opacity: 1;
   }
 
   39% {
-    --diode-alpha: 1;
+    opacity: 1;
   }
 
   45%,
   100% {
-    --diode-alpha: 0;
+    opacity: 0;
   }
 }
 
+html.tab-hidden .brand-orbit,
+html.tab-hidden .brand-spark,
+html.tab-hidden .auth-card-diode-beam,
+.auth-shell:has(.is-moving) .brand-orbit,
+.auth-shell:has(.is-moving) .brand-spark,
+.auth-shell:has(.is-moving) .auth-card-diode-beam {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .brand-core,
   .brand-orbit,
   .brand-spark,
-  .auth-card::before,
-  .auth-card::after,
+  .auth-card-diode-beam,
   .auth-stage-leave-register .auth-card-slot,
   .auth-stage-enter-register .auth-card-slot,
   .auth-stage-leave-login .auth-card-slot,
@@ -427,8 +420,7 @@
     transform: none;
   }
 
-  .auth-card::before,
-  .auth-card::after,
+  .auth-card-diode,
   .auth-card-light {
     opacity: 0;
   }

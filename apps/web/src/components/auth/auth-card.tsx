@@ -12,6 +12,15 @@ const restShadowY = 30
 function AuthCard({ children }: { children: ReactNode }) {
   const cardRef = useRef<HTMLElement>(null)
 
+  /** Последняя точка мыши. Кадр читает её один раз. */
+  const pointerRef = useRef<{ x: number; y: number } | null>(null)
+
+  /** Номер кадра наклона. Ноль значит, что кадр не заказан. */
+  const frameRef = useRef(0)
+
+  /** Курсор ещё над карточкой. Поздний кадр после ухода ничего не пишет. */
+  const hoveringRef = useRef(false)
+
   useEffect(() => {
     const card = cardRef.current
     const stage = card?.closest(".auth-stage")
@@ -20,7 +29,10 @@ function AuthCard({ children }: { children: ReactNode }) {
       if (stage.classList.contains("is-moving")) layFlat(card, true)
     })
     observer.observe(stage, { attributes: true, attributeFilter: ["class"] })
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      cancelTiltFrame(frameRef)
+    }
   }, [])
 
   function onPointerMove(event: PointerEvent<HTMLElement>) {
@@ -28,27 +40,22 @@ function AuthCard({ children }: { children: ReactNode }) {
     if (prefersReducedMotion()) return
     const stage = event.currentTarget.closest(".auth-stage")
     if (stage?.classList.contains("is-moving")) return
-    const rect = event.currentTarget.getBoundingClientRect()
-    const px = (event.clientX - rect.left) / rect.width - 0.5
-    const py = (event.clientY - rect.top) / rect.height - 0.5
-    const length = Math.hypot(px, py)
-    const scale = length > 0.5 ? 0.5 / length : 1
-    const nx = px * scale
-    const ny = py * scale
-    const tilt = tiltLimit(rect)
+    hoveringRef.current = true
+    pointerRef.current = { x: event.clientX, y: event.clientY }
     const card = event.currentTarget
-    card.classList.remove("is-resting", "is-flat")
-    writeTilt(
-      card,
-      -ny * tilt * 2,
-      nx * tilt * 2,
-      ((event.clientX - rect.left) / rect.width) * 100,
-      ((event.clientY - rect.top) / rect.height) * 100,
-      1,
-    )
+    if (frameRef.current !== 0) return
+    frameRef.current = window.requestAnimationFrame(() => {
+      frameRef.current = 0
+      const point = pointerRef.current
+      if (!hoveringRef.current || !point) return
+      applyTilt(card, point.x, point.y)
+    })
   }
 
   function onPointerLeave(event: PointerEvent<HTMLElement>) {
+    hoveringRef.current = false
+    pointerRef.current = null
+    cancelTiltFrame(frameRef)
     layFlat(event.currentTarget, false)
   }
 
@@ -61,10 +68,47 @@ function AuthCard({ children }: { children: ReactNode }) {
         onPointerLeave={onPointerLeave}
         onPointerCancel={onPointerLeave}
       >
+        <div className="auth-card-diode" aria-hidden="true">
+          <span className="auth-card-diode-beam" />
+        </div>
+        <div className="auth-card-diode auth-card-diode-glow" aria-hidden="true">
+          <span className="auth-card-diode-beam" />
+        </div>
         <div className="auth-card-light" aria-hidden="true" />
         <div className="auth-card-body">{children}</div>
       </section>
     </div>
+  )
+}
+
+/** Снимает заказанный кадр наклона. */
+function cancelTiltFrame(frameRef: { current: number }) {
+  if (frameRef.current === 0) return
+  window.cancelAnimationFrame(frameRef.current)
+  frameRef.current = 0
+}
+
+/** Один раз за кадр читает размеры карточки и записывает наклон. */
+function applyTilt(card: HTMLElement, clientX: number, clientY: number) {
+  const stage = card.closest(".auth-stage")
+  if (stage?.classList.contains("is-moving")) return
+  const rect = card.getBoundingClientRect()
+  if (rect.width === 0 || rect.height === 0) return
+  const px = (clientX - rect.left) / rect.width - 0.5
+  const py = (clientY - rect.top) / rect.height - 0.5
+  const length = Math.hypot(px, py)
+  const scale = length > 0.5 ? 0.5 / length : 1
+  const nx = px * scale
+  const ny = py * scale
+  const tilt = tiltLimit(rect)
+  card.classList.remove("is-resting", "is-flat")
+  writeTilt(
+    card,
+    -ny * tilt * 2,
+    nx * tilt * 2,
+    ((clientX - rect.left) / rect.width) * 100,
+    ((clientY - rect.top) / rect.height) * 100,
+    1,
   )
 }
 

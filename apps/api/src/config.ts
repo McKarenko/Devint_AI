@@ -26,6 +26,8 @@ type ApiConfig = {
   databaseUrl: string
   /** Секрет обезличенных ключей попыток входа. В логи его не писать. */
   loginThrottleSecret: string
+  /** Адрес Nginx. Пустое значение значит, что заголовок адреса клиента не доверяем. */
+  trustedProxy: string | undefined
 }
 
 /** Хост по умолчанию: только этот компьютер, не вся локальная сеть. */
@@ -59,6 +61,7 @@ function readApiConfig(): ApiConfig {
     mailMode: readMailMode(nodeEnv),
     databaseUrl: readDatabaseUrl(),
     loginThrottleSecret: readLoginThrottleSecret(),
+    trustedProxy: readTrustedProxy(),
   }
 }
 
@@ -221,6 +224,63 @@ function readMailMode(nodeEnv: NodeEnv): MailMode {
   }
 
   return mailMode
+}
+
+/** Читает TRUSTED_PROXY. Пустое значение выключает доверие к заголовку адреса. */
+function readTrustedProxy(): string | undefined {
+  /** Сырое значение или отсутствие переменной. */
+  const rawProxy = process.env.TRUSTED_PROXY
+
+  /** Адрес прокси без краевых пробелов. */
+  const trustedProxy = rawProxy === undefined ? "" : rawProxy.trim()
+
+  if (trustedProxy.length === 0) {
+    return undefined
+  }
+
+  if (!isTrustedProxy(trustedProxy)) {
+    throw new Error("TRUSTED_PROXY должен быть IPv4-адресом или сетью, например 172.28.10.10 или 172.28.10.0/24")
+  }
+
+  return trustedProxy
+}
+
+/** Проверяет один IPv4-адрес или сеть. Имена хостов не принимаем. */
+function isTrustedProxy(value: string) {
+  /** Части адреса. Сеть после слэша необязательна. */
+  const match = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})(?:\/(\d{1,2}))?$/.exec(value)
+
+  if (!match) {
+    return false
+  }
+
+  /** Четыре октета. Индекс может быть пустым, тогда адрес не принимаем. */
+  const first = match[1]
+  const second = match[2]
+  const third = match[3]
+  const fourth = match[4]
+
+  if (first === undefined || second === undefined || third === undefined || fourth === undefined) {
+    return false
+  }
+
+  /** Четыре октета. Каждый не больше 255. */
+  const octets = [first, second, third, fourth].map(Number)
+
+  if (octets.some((octet) => octet > 255)) {
+    return false
+  }
+
+  if (match[5] !== undefined) {
+    /** Длина префикса сети. */
+    const bits = Number(match[5])
+
+    if (bits < 0 || bits > 32) {
+      return false
+    }
+  }
+
+  return true
 }
 
 /** Проверяет, что строка входит в список режимов писем. */

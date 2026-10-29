@@ -1,0 +1,104 @@
+# Выкладка. Локальную базу не трогает: том и порты другие, порт базы наружу не открыт.
+# Не запускать, пока нет сертификата и настоящего сервиса писем.
+# При NODE_ENV=production API сам не стартует без отправки писем. Это нарочно.
+# HSTS ставит Nginx, не сайт. Сайт по-прежнему без HSTS.
+
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?Задайте POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Задайте POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:?Задайте POSTGRES_DB}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:?Задайте APP_DB_PASSWORD}
+      MIGRATE_DB_PASSWORD: ${MIGRATE_DB_PASSWORD:?Задайте MIGRATE_DB_PASSWORD}
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+      - ./infrastructure/docker/init-roles.sh:/docker-entrypoint-initdb.d/01-roles.sh:ro
+    networks:
+      - datanet
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  migrate:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.api
+    environment:
+      MIGRATE_DATABASE_URL: postgresql://devint_migrate:${MIGRATE_DB_PASSWORD:?Задайте MIGRATE_DB_PASSWORD}@db:5432/${POSTGRES_DB:?Задайте POSTGRES_DB}
+    command: ["node", "apps/api/dist/migrate.js"]
+    networks:
+      - datanet
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
+  api:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.api
+    environment:
+      NODE_ENV: production
+      API_HOST: 172.28.10.11
+      API_PORT: "4000"
+      WEB_ORIGIN: https://${WEB_HOST:?Задайте WEB_HOST}
+      DATABASE_URL: postgresql://devint_app:${APP_DB_PASSWORD:?Задайте APP_DB_PASSWORD}@db:5432/${POSTGRES_DB:?Задайте POSTGRES_DB}
+      LOGIN_THROTTLE_SECRET: ${LOGIN_THROTTLE_SECRET:?Задайте LOGIN_THROTTLE_SECRET}
+      TRUSTED_PROXY: 172.28.10.10
+      UV_THREADPOOL_SIZE: "8"
+    networks:
+      apinet:
+        ipv4_address: 172.28.10.11
+      datanet: {}
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: "no"
+
+  web:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.web
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:?Задайте NEXT_PUBLIC_API_URL}
+    networks:
+      - webnet
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      WEB_HOST: ${WEB_HOST:?Задайте WEB_HOST}
+      API_HOST: ${API_HOST:?Задайте API_HOST}
+    volumes:
+      - ./infrastructure/docker/nginx/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ${TLS_CERT_DIR:?Задайте TLS_CERT_DIR}:/etc/nginx/certs:ro
+    networks:
+      apinet:
+        ipv4_address: 172.28.10.10
+      webnet: {}
+    depends_on:
+      - api
+      - web
+    restart: unless-stopped
+
+networks:
+  apinet:
+    ipam:
+      config:
+        - subnet: 172.28.10.0/24
+  webnet: {}
+  datanet: {}
+
+volumes:
+  postgres_prod_data:

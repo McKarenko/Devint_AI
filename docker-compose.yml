@@ -2,7 +2,8 @@ services:
   db:
     image: pgvector/pgvector:pg17
     ports:
-      - "127.0.0.1:5432:5432"
+      # 5433 на компьютере, 5432 внутри контейнера: Postgres.app занимает 5432.
+      - "127.0.0.1:5433:5432"
     environment:
       POSTGRES_USER: ${POSTGRES_USER:?Задайте POSTGRES_USER в файле .env}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Задайте POSTGRES_PASSWORD в файле .env}

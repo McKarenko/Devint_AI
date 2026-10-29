@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next"
 import { headers } from "next/headers"
 import localFont from "next/font/local"
 
+import { TabMotionPause } from "@/components/tab-motion-pause"
+
 import "./globals.css"
 
 /** Единственный шрифт продукта. Файлы лежат в проекте, лицензия OFL. */
@@ -35,6 +37,7 @@ export default async function RootLayout({
   return (
     <html lang="ru">
       <body className={`${montserrat.variable} antialiased`}>
+        <TabMotionPause />
         {children}
       </body>
     </html>

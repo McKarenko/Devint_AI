@@ -402,15 +402,15 @@
     "semantic_hash": ""
   },
   ".ai/gpt.md": {
-    "mtime": 1793299118.802854,
-    "seen": 1793299135.715462,
-    "ast_hash": "c1dec62f5adf5b38673b6f56175b2c7e",
+    "mtime": 1793299780.1160188,
+    "seen": 1793300044.628812,
+    "ast_hash": "1f0473926ffb8ac91d22dfd736a5305e",
     "semantic_hash": ""
   },
   ".ai/timework.md": {
-    "mtime": 1793299116.3175023,
-    "seen": 1793299135.715463,
-    "ast_hash": "d6f5a3fb51b8e6e04b6b6fa60290eaec",
+    "mtime": 1793299777.542108,
+    "seen": 1793300044.628814,
+    "ast_hash": "367e120063ec8b8d9c129178dad3f4fe",
     "semantic_hash": ""
   },
   "apps/web/src/app/(auth)/layout.tsx": {
@@ -462,9 +462,9 @@
     "semantic_hash": ""
   },
   "apps/web/src/middleware.ts": {
-    "mtime": 1793298649.0317466,
-    "seen": 1793299135.7147899,
-    "ast_hash": "71e180440783f48328756e908ac3df65",
+    "mtime": 1793299986.185425,
+    "seen": 1793300044.628042,
+    "ast_hash": "f488ae49f3fac032707657d89f1e00b7",
     "semantic_hash": ""
   },
   "pnpm-lock.yaml": {

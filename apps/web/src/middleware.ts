@@ -31,11 +31,14 @@ function contentSecurityPolicy(nonce: string) {
   const scriptSrc = isDev
     ? `'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-eval'`
     : `'self' 'nonce-${nonce}' 'strict-dynamic'`
+  /** Позиции ядра и наклон карточки пишутся атрибутом style. Тег style сюда не входит. */
+  const styleAttr = "'unsafe-inline'"
 
   return [
     "default-src 'self'",
     `script-src ${scriptSrc}`,
     `style-src 'self' 'nonce-${nonce}'`,
+    `style-src-attr ${styleAttr}`,
     "img-src 'self'",
     "font-src 'self'",
     `connect-src 'self'${apiOrigin ? ` ${apiOrigin}` : ""}`,

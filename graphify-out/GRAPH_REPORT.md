@@ -1,7 +1,7 @@
 # Graph Report - Devint_AI  (2026-10-29)
 
 ## Corpus Check
-- 80 files · ~33,804 words
+- 80 files · ~33,934 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 11 file(s) not represented in the graph (top: (none) 5, .css 3, .mdc 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `97499b3d`
+- Built from commit: `038a2cb3`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

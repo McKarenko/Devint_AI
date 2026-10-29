@@ -32,6 +32,11 @@
   text-decoration: underline;
   text-decoration-color: var(--color-link-line);
   cursor: pointer;
+  transition: opacity 150ms ease;
+}
+
+.cookie-notice-link:hover {
+  opacity: 0.8;
 }
 
 .cookie-notice-link:focus-visible {

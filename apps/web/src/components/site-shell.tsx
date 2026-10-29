@@ -59,7 +59,11 @@ function SiteShell({
         <div className="cookie-notice">
           <p className="cookie-notice-text">
             Мы используем только необходимые cookie для работы входа. Подробнее в{" "}
-            <button type="button" className="cookie-notice-link" onClick={() => setPrivacyOpen(true)}>
+            <button
+              type="button"
+              onClick={() => setPrivacyOpen(true)}
+              className="cookie-notice-link text-[var(--color-link)] underline hover:opacity-80 transition-opacity cursor-pointer bg-transparent border-none p-0 font-[inherit]"
+            >
               политике конфиденциальности
             </button>
           </p>

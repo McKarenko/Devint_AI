@@ -59,35 +59,41 @@ export default function HomePage() {
   }
 
   return (
-    <main className="app-frame min-h-screen" onPointerMove={onPointerMove} onPointerLeave={onPointerLeave}>
-      <div style={{ maxWidth: 320, marginLeft: "auto", marginRight: "auto" }}>
-        <ConorFace state={state} gaze={gaze} />
-      </div>
-      <div style={{ marginTop: 16, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 16 }}>
-        {faceStates.map((item) => (
-          <Button
-            key={item.state}
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => setState(item.state)}
-          >
-            {item.label}
-          </Button>
-        ))}
-      </div>
-      <div style={{ marginTop: 16, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 16 }}>
-        {faceGazes.map((item) => (
-          <Button
-            key={item.label}
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => setGaze(item.gaze)}
-          >
-            {item.label}
-          </Button>
-        ))}
+    <main
+      className="app-frame flex w-full flex-1 items-center justify-center"
+      onPointerMove={onPointerMove}
+      onPointerLeave={onPointerLeave}
+    >
+      <div>
+        <div style={{ maxWidth: 320, marginLeft: "auto", marginRight: "auto" }}>
+          <ConorFace state={state} gaze={gaze} />
+        </div>
+        <div style={{ marginTop: 16, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 16 }}>
+          {faceStates.map((item) => (
+            <Button
+              key={item.state}
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setState(item.state)}
+            >
+              {item.label}
+            </Button>
+          ))}
+        </div>
+        <div style={{ marginTop: 16, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 16 }}>
+          {faceGazes.map((item) => (
+            <Button
+              key={item.label}
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setGaze(item.gaze)}
+            >
+              {item.label}
+            </Button>
+          ))}
+        </div>
       </div>
     </main>
   )

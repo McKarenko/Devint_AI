@@ -2,11 +2,28 @@
 
 import type { MouseEvent, ReactNode } from "react"
 
-/** Адрес соседней страницы входа. */
-type AuthSwitchHref = "/login" | "/register"
+/** Обычный вход. */
+const loginHref = "/login" as const
 
-/** Ссылка между входом и регистрацией. Без скрипта остаётся обычным переходом. */
-function AuthSwitchLink({ href, children }: { href: AuthSwitchHref; children: ReactNode }) {
+/** Регистрация. */
+const registerHref = "/register" as const
+
+/** Запрос ссылки на сброс. Это тот же вход, не отдельная страница. */
+const resetRequestHref = "/login?reset=1" as const
+
+/** Адрес соседней карточки входа. */
+type AuthSwitchHref = typeof loginHref | typeof registerHref | typeof resetRequestHref
+
+/** Ссылка между карточками входа. Без скрипта остаётся обычным переходом. */
+function AuthSwitchLink({
+  href,
+  className,
+  children,
+}: {
+  href: AuthSwitchHref
+  className?: string
+  children: ReactNode
+}) {
   /** Просит сцену сначала увезти карточку, а уже потом сменить адрес. */
   function onClick(event: MouseEvent<HTMLAnchorElement>) {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
@@ -18,10 +35,10 @@ function AuthSwitchLink({ href, children }: { href: AuthSwitchHref; children: Re
   }
 
   return (
-    <a href={href} onClick={onClick}>
+    <a href={href} className={className} onClick={onClick}>
       {children}
     </a>
   )
 }
 
-export { AuthSwitchLink }
+export { AuthSwitchLink, loginHref, registerHref, resetRequestHref }

@@ -274,12 +274,18 @@
 }
 
 .auth-forgot {
+  display: block;
   margin: 16px 0 0;
   color: var(--color-link);
   font-size: var(--font-size-body);
   text-align: center;
   text-decoration: underline;
   text-decoration-color: var(--color-link-line);
+}
+
+.auth-forgot:focus-visible {
+  outline: 2px solid var(--color-accent-light);
+  outline-offset: 2px;
 }
 
 @property --diode-angle {

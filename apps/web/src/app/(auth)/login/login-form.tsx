@@ -4,7 +4,7 @@ import { useRef, useState, type FormEvent } from "react"
 
 import { Button, Input, PasswordInput } from "@devint_ai/ui"
 
-import { AuthSwitchLink } from "@/components/auth/auth-switch-link"
+import { AuthSwitchLink, registerHref, resetRequestHref } from "@/components/auth/auth-switch-link"
 import { emailError } from "../register/register-rules"
 
 /** Адрес API из окружения. Пароль базы сюда не входит. */
@@ -129,7 +129,7 @@ function LoginForm() {
         <h1 className="auth-title">Вход</h1>
         <p className="auth-note">Вход выполнен</p>
         <p className="auth-login">
-          Нет аккаунта? <AuthSwitchLink href="/register">Регистрация</AuthSwitchLink>
+          Нет аккаунта? <AuthSwitchLink href={registerHref}>Регистрация</AuthSwitchLink>
         </p>
       </>
     )
@@ -182,13 +182,15 @@ function LoginForm() {
           ) : null}
         </div>
       </div>
-      <p className="auth-forgot">Забыли пароль?</p>
+      <AuthSwitchLink className="auth-forgot" href={resetRequestHref}>
+        Забыли пароль?
+      </AuthSwitchLink>
       {formMessage ? <p className="auth-form-error">{formMessage}</p> : null}
       <Button className="auth-submit" type="submit" disabled={pending}>
         {pending ? "Входим…" : "Войти"}
       </Button>
       <p className="auth-login">
-        Нет аккаунта? <AuthSwitchLink href="/register">Регистрация</AuthSwitchLink>
+        Нет аккаунта? <AuthSwitchLink href={registerHref}>Регистрация</AuthSwitchLink>
       </p>
     </form>
   )

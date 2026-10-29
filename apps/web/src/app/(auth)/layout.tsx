@@ -1,4 +1,4 @@
-import type { ReactNode } from "react"
+import { Suspense, type ReactNode } from "react"
 
 import { AuthShell } from "@/components/auth/auth-shell"
 import { AuthStage } from "@/components/auth/auth-stage"
@@ -7,7 +7,9 @@ import { AuthStage } from "@/components/auth/auth-stage"
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
     <AuthShell>
-      <AuthStage>{children}</AuthStage>
+      <Suspense fallback={<div className="auth-stage">{children}</div>}>
+        <AuthStage>{children}</AuthStage>
+      </Suspense>
     </AuthShell>
   )
 }

@@ -27,9 +27,13 @@ function loginPasswordError(value: string) {
 }
 
 /** Форма входа. Пароль не пишется в консоль и не остаётся в адресе. */
-function LoginForm() {
-  /** Почта. */
-  const [email, setEmail] = useState("")
+function LoginForm({
+  email,
+  onEmailChange,
+}: {
+  email: string
+  onEmailChange: (value: string) => void
+}) {
   /** Пароль. */
   const [password, setPassword] = useState("")
   /** Ошибка почты. */
@@ -90,7 +94,28 @@ function LoginForm() {
 
       if (response.status === 200) {
         setPassword("")
-        setSignedIn(true)
+
+        try {
+          /** Сессия после входа. Один запрос, без повтора. */
+          const session = await fetch(`${apiUrl}/auth/me`, { credentials: "include" })
+
+          if (session.status === 200) {
+            setSignedIn(true)
+            return
+          }
+
+          if (session.status === 401) {
+            setFormMessage(
+              "Вход не завершён: браузер не сохранил сессию. Разрешите файлы cookie для этого сайта и попробуйте ещё раз",
+            )
+            return
+          }
+
+          setFormMessage("Не удалось подтвердить вход. Попробуйте ещё раз")
+        } catch {
+          setFormMessage("Не удалось подтвердить вход. Попробуйте ещё раз")
+        }
+
         return
       }
 
@@ -151,7 +176,7 @@ function LoginForm() {
             aria-describedby={emailMessage ? "login-email-note" : undefined}
             value={email}
             onChange={(event) => {
-              setEmail(event.target.value)
+              onEmailChange(event.target.value)
               setEmailMessage("")
             }}
           />

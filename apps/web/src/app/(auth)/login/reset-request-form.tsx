@@ -11,9 +11,14 @@ import { emailError } from "../register/register-rules"
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
 /** Запрос ссылки на сброс. Не говорит, есть ли такой адрес. */
-function ResetRequestForm() {
-  /** Почта. */
-  const [email, setEmail] = useState("")
+function ResetRequestForm({
+  email,
+  onEmailChange,
+}: {
+  email: string
+  onEmailChange: (value: string) => void
+}) {
+  /** Почта приходит с карточки входа. Key карточки её не хранит. */
   /** Ошибка почты. */
   const [emailMessage, setEmailMessage] = useState("")
   /** Ошибка под кнопкой. */
@@ -68,6 +73,7 @@ function ResetRequestForm() {
       /** Ответ запроса. Текст сервера на экран не выводим. */
       const response = await fetch(`${apiUrl}/auth/password-reset/request`, {
         method: "POST",
+        credentials: "include",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ email: email.trim().toLowerCase() }),
       })
@@ -127,7 +133,7 @@ function ResetRequestForm() {
             aria-describedby={emailMessage ? "reset-email-note" : undefined}
             value={email}
             onChange={(event) => {
-              setEmail(event.target.value)
+              onEmailChange(event.target.value)
               setEmailMessage("")
             }}
           />

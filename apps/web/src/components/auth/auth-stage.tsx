@@ -114,10 +114,16 @@ function AuthStage({ children }: { children: ReactNode }) {
         return
       }
 
-      if (phaseRef.current !== "idle" || href === location) {
+      if (href === location) {
+        event.preventDefault()
         return
       }
 
+      if (phaseRef.current !== "idle") {
+        return
+      }
+
+      event.preventDefault()
       pendingTarget.current = href
       setDirection(directionFor(href))
 

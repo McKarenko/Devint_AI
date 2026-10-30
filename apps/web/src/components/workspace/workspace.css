@@ -14,6 +14,19 @@
   initial-value: 0.06;
 }
 
+/* Положение общего света. Пластина, выступ и блик Home читают одни и те же числа. */
+@property --light-x {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0.36;
+}
+
+@property --light-y {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0.2;
+}
+
 /*
  * Все значения материала, высоты, выступа и времени помечены provisional / требует утверждения.
  * Источник правды: docs/ui/main-screen-design-system.md.
@@ -26,6 +39,12 @@
   --workspace-sink: 3px;
   --workspace-bleed: 8px;
   --workspace-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --light-x: 0.36;
+  --light-y: 0.2;
+
+  transition:
+    --light-x 280ms var(--workspace-ease),
+    --light-y 280ms var(--workspace-ease);
 
   /* Высота пластины вместе с запасом над экраном и высота общего материала пластины и выступа. */
   --workspace-plate-height: calc(var(--workspace-bleed) + var(--workspace-bar) + var(--workspace-safe-top));
@@ -43,7 +62,8 @@
 }
 
 /*
- * Один материал на пластину и выступ: тёмная керамика с направленным светом сверху слева.
+ * Один материал на пластину и выступ: тёмная керамика и один мягкий свет.
+ * Центр света задают --light-x и --light-y на общем полотне, поэтому пластина и выступ светятся вместе.
  * Оба рисуют одинаковые слои на общем полотне шириной 100vw с центром по оси экрана
  * и высотой всего материала. У выступа полотно сдвинуто вверх на высоту пластины,
  * поэтому свет и зерно продолжаются без шва.
@@ -55,7 +75,11 @@
   --workspace-material:
     repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.034) 0 1px, transparent 1px 3px),
     repeating-linear-gradient(178deg, rgba(255, 255, 255, 0.024) 0 1px, transparent 1px 5px),
-    linear-gradient(104deg, rgba(198, 214, 236, var(--workspace-sheen)) 0%, transparent 46%),
+    radial-gradient(
+      120vw 80vw at calc(var(--light-x) * 100%) calc(var(--light-y) * 100%),
+      rgba(198, 214, 236, var(--workspace-sheen)),
+      transparent 62%
+    ),
     linear-gradient(180deg, #181b21 0%, #121419 58%, #0e1014 100%);
   --workspace-material-blend: overlay, overlay, normal, normal;
 }
@@ -154,8 +178,12 @@
   content: "";
   opacity: 0.7;
   rotate: -30deg;
+  /* Тот же свет: от края до края не больше 3px по горизонтали и 1px по вертикали. */
+  translate: calc((var(--light-x) - 0.36) / 0.14 * 3px) calc((var(--light-y) - 0.2) / 0.06 * 1px);
   pointer-events: none;
-  transition: opacity 280ms var(--workspace-ease);
+  transition:
+    opacity 280ms var(--workspace-ease),
+    translate 280ms var(--workspace-ease);
 }
 
 /*
@@ -235,6 +263,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .workspace-header,
   .workspace-header-plate,
   .workspace-island,
   .workspace-home,
@@ -262,5 +291,9 @@
 
   .workspace-home.is-pulsing {
     animation: none;
+  }
+
+  .workspace-home::after {
+    translate: none;
   }
 }

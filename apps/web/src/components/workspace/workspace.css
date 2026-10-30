@@ -38,7 +38,7 @@
   left: 0;
   border-radius: 0 0 16px 16px;
   background: var(--workspace-plate);
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45));
+  filter: drop-shadow(0 1px 0 var(--color-field-border)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
   transition: translate 280ms var(--workspace-ease);
   pointer-events: none;
 }

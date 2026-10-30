@@ -4,8 +4,8 @@ node_modules/
 
 # env
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
 
 # Локальный отчёт для старшего агента
 .ai/handoff.md

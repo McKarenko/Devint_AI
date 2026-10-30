@@ -1,8 +1,18 @@
+import type { Viewport } from "next"
 import type { ReactNode } from "react"
 
 import { SiteShell } from "@/components/site-shell"
 import { WorkspaceHeader } from "@/components/workspace/workspace-header"
 import { offerText, privacyText } from "@/lib/legal"
+
+/**
+ * Шапка идёт до самого верха экрана, в том числе под вырез iPhone.
+ * viewportFit включает безопасные отступы, themeColor красит строку состояния в цвет шапки.
+ */
+export const viewport: Viewport = {
+  viewportFit: "cover",
+  themeColor: "#111a28",
+}
 
 /** Рабочий экран: шапка сверху, подвала нет. Плашка cookie та же, что на входе. */
 export default function WorkspaceLayout({ children }: { children: ReactNode }) {

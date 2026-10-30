@@ -4,80 +4,163 @@
   flex-direction: column;
 }
 
+/*
+ * Значения высоты, выступа, цвета пластины и времени помечены provisional.
+ * Источник правды: docs/ui/main-screen-design-system.md.
+ */
 .workspace-header {
+  --workspace-bar: 28px;
+  --workspace-island-width: 148px;
+  --workspace-island-drop: 10px;
+  --workspace-fillet: 8px;
+  --workspace-plate: #111a28;
+  --workspace-sink: 3px;
+  --workspace-bleed: 8px;
+  --workspace-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1fr var(--workspace-island-width) 1fr;
+  align-items: center;
+  height: calc(var(--workspace-bar) + env(safe-area-inset-top, 0px));
+  padding: env(safe-area-inset-top, 0px) max(8px, env(safe-area-inset-right, 0px)) 0
+    max(8px, env(safe-area-inset-left, 0px));
+}
+
+/* Пластина выходит за верх экрана на запас, чтобы при опускании сверху не открывалась щель. */
+.workspace-header-plate {
+  position: absolute;
+  top: calc(var(--workspace-bleed) * -1);
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 0 0 16px 16px;
+  background: var(--workspace-plate);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--color-accent) 10%, transparent));
+  transition: translate 280ms var(--workspace-ease);
+  pointer-events: none;
+}
+
+.workspace-header-actions {
   position: relative;
   z-index: 1;
   display: flex;
   align-items: center;
-  height: 56px;
-  margin: 12px 16px 0;
-  padding: 0 12px;
+  gap: 8px;
+  min-width: 0;
 }
 
-.workspace-header-plate {
-  position: absolute;
-  inset: 0;
-  border: 1px solid var(--color-card-border);
-  border-top: 0;
-  border-radius: 0 0 24px 24px;
-  background:
-    linear-gradient(180deg, var(--color-card-highlight), var(--color-card)),
-    var(--color-page);
-  box-shadow: 0 12px 28px rgba(2, 5, 10, 0.45);
-  transform-origin: top center;
-  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
+.workspace-header-center,
+.workspace-header-reserve {
+  min-width: 0;
 }
 
+/* Выступ: продолжение пластины того же цвета, без контура. */
 .workspace-island {
   position: absolute;
+  top: calc(100% - 1px);
   left: 50%;
-  bottom: -12px;
-  width: 168px;
-  height: 32px;
-  border: 1px solid var(--color-dialog-border);
-  border-radius: 16px;
-  background:
-    linear-gradient(180deg, var(--color-card-highlight), var(--color-card)),
-    var(--color-dialog);
-  box-shadow:
-    0 10px 20px rgba(2, 5, 10, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
-  transform: translateX(-50%);
-  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  width: var(--workspace-island-width);
+  height: calc(var(--workspace-island-drop) + 1px);
+  margin-left: calc(var(--workspace-island-width) / -2);
+  border-radius: 0 0 10px 10px;
+  background: var(--workspace-plate);
+  transform-origin: top center;
+  transition: scale 280ms var(--workspace-ease);
+}
+
+/* Вогнутые скругления в местах, где выступ сходится с пластиной. */
+.workspace-island::before,
+.workspace-island::after {
+  position: absolute;
+  top: 1px;
+  width: var(--workspace-fillet);
+  height: var(--workspace-fillet);
+  content: "";
+}
+
+.workspace-island::before {
+  right: 100%;
+  background: radial-gradient(
+    circle at 0 100%,
+    transparent calc(var(--workspace-fillet) - 0.5px),
+    var(--workspace-plate) var(--workspace-fillet)
+  );
+}
+
+.workspace-island::after {
+  left: 100%;
+  background: radial-gradient(
+    circle at 100% 100%,
+    transparent calc(var(--workspace-fillet) - 0.5px),
+    var(--workspace-plate) var(--workspace-fillet)
+  );
+}
+
+/* Кнопка Home. Сама кнопка не вращается: на ней блик, наведение и импульс. */
+.workspace-home {
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--color-text);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    translate 280ms var(--workspace-ease),
+    scale 280ms var(--workspace-ease);
+}
+
+/* Невидимая область нажатия 40px, чтобы маленькая кнопка не мешала пальцу. */
+.workspace-home::before {
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  content: "";
+}
+
+/* Резкий блик сверху слева. Он не вращается вместе с линзой, свет остаётся на месте. */
+.workspace-home::after {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  width: 7px;
+  height: 3px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 72%);
+  content: "";
+  rotate: -28deg;
   pointer-events: none;
 }
 
-.workspace-home {
-  position: relative;
-  z-index: 1;
+/* Линза: прозрачная, без размытия. Тонкий светлый обод, голубой отсвет внизу. */
+.workspace-home-lens {
+  position: absolute;
+  inset: 0;
   display: grid;
-  width: 40px;
-  height: 40px;
   place-items: center;
-  padding: 0;
-  border: 1px solid var(--color-check-border);
   border-radius: 50%;
   background:
-    radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.04) 46%, transparent),
-    var(--color-dialog);
+    radial-gradient(circle at 50% 118%, color-mix(in srgb, var(--color-accent) 60%, transparent), transparent 58%),
+    radial-gradient(circle at 50% 50%, transparent 56%, color-mix(in srgb, var(--color-accent-light) 32%, transparent) 100%),
+    color-mix(in srgb, var(--color-accent-light) 5%, transparent);
   box-shadow:
-    0 8px 16px rgba(2, 5, 10, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.28),
-    inset 0 -6px 10px rgba(2, 5, 10, 0.35);
-  color: var(--color-text);
-  backdrop-filter: blur(8px);
-  cursor: pointer;
-  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+    inset 0 0 0 1px color-mix(in srgb, var(--color-accent-light) 48%, transparent),
+    inset 0 -2px 3px color-mix(in srgb, var(--color-accent) 40%, transparent),
+    inset 0 1px 1px rgba(255, 255, 255, 0.32),
+    0 0 7px color-mix(in srgb, var(--color-accent) 28%, transparent);
+  transition: transform 420ms var(--workspace-ease);
 }
 
 .workspace-home-icon {
-  width: 16px;
-  height: 16px;
-}
-
-.workspace-home:hover {
-  transform: scale(1.06);
+  width: 12px;
+  height: 12px;
 }
 
 .workspace-home:focus-visible {
@@ -85,58 +168,55 @@
   outline-offset: 4px;
 }
 
-.workspace-home.is-turning {
-  animation: workspace-home-turn 320ms cubic-bezier(0.22, 1, 0.36, 1);
+.workspace-home.is-pulsing {
+  animation: workspace-home-pulse 420ms var(--workspace-ease);
 }
 
-@keyframes workspace-home-turn {
-  0% {
-    transform: rotate(0deg) scale(1);
-  }
-
-  62% {
-    transform: rotate(180deg) scale(1);
-  }
-
-  78% {
-    transform: rotate(180deg) scale(1.06);
-  }
-
-  100% {
-    transform: rotate(360deg) scale(1);
+@keyframes workspace-home-pulse {
+  40% {
+    scale: 1.24;
   }
 }
 
 @media (hover: hover) and (pointer: fine) {
   .workspace-header:hover .workspace-header-plate {
-    transform: translateY(8px) scaleY(1.08);
+    translate: 0 var(--workspace-sink);
   }
 
   .workspace-header:hover .workspace-island {
-    transform: translateX(-50%) translateY(8px);
+    scale: 1.05 1;
+  }
+
+  .workspace-header:hover .workspace-home {
+    translate: 0 calc(var(--workspace-sink) / 2);
+    scale: 1.08;
+  }
+
+  .workspace-header:hover .workspace-home:hover {
+    scale: 1.16;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .workspace-header-plate,
   .workspace-island,
-  .workspace-home {
+  .workspace-home,
+  .workspace-home-lens {
     transition: none;
   }
 
-  .workspace-header:hover .workspace-header-plate {
-    transform: none;
+  .workspace-header:hover .workspace-header-plate,
+  .workspace-header:hover .workspace-home {
+    translate: none;
   }
 
-  .workspace-header:hover .workspace-island {
-    transform: translateX(-50%);
+  .workspace-header:hover .workspace-island,
+  .workspace-header:hover .workspace-home,
+  .workspace-header:hover .workspace-home:hover {
+    scale: none;
   }
 
-  .workspace-home:hover {
-    transform: none;
-  }
-
-  .workspace-home.is-turning {
+  .workspace-home.is-pulsing {
     animation: none;
   }
 }

@@ -11,7 +11,7 @@ import { offerText, privacyText } from "@/lib/legal"
  */
 export const viewport: Viewport = {
   viewportFit: "cover",
-  themeColor: "#131418",
+  themeColor: "#181a20",
 }
 
 /** Рабочий экран: шапка сверху, подвала нет. Плашка cookie та же, что на входе. */

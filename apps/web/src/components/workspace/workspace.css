@@ -12,8 +12,7 @@
   --workspace-bar: 28px;
   --workspace-island-width: 148px;
   --workspace-island-drop: 10px;
-  --workspace-fillet: 8px;
-  --workspace-plate: #131418;
+  --workspace-plate: #181a20;
   --workspace-sink: 3px;
   --workspace-bleed: 8px;
   --workspace-ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -38,7 +37,7 @@
   left: 0;
   border-radius: 0 0 16px 16px;
   background: var(--workspace-plate);
-  filter: drop-shadow(0 1px 0 var(--color-field-border)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.16));
   transition: translate 280ms var(--workspace-ease);
   pointer-events: none;
 }
@@ -69,34 +68,6 @@
   background: var(--workspace-plate);
   transform-origin: top center;
   transition: scale 280ms var(--workspace-ease);
-}
-
-/* Вогнутые скругления в местах, где выступ сходится с пластиной. */
-.workspace-island::before,
-.workspace-island::after {
-  position: absolute;
-  top: 1px;
-  width: var(--workspace-fillet);
-  height: var(--workspace-fillet);
-  content: "";
-}
-
-.workspace-island::before {
-  right: 100%;
-  background: radial-gradient(
-    circle at 0 100%,
-    transparent calc(var(--workspace-fillet) - 0.5px),
-    var(--workspace-plate) var(--workspace-fillet)
-  );
-}
-
-.workspace-island::after {
-  left: 100%;
-  background: radial-gradient(
-    circle at 100% 100%,
-    transparent calc(var(--workspace-fillet) - 0.5px),
-    var(--workspace-plate) var(--workspace-fillet)
-  );
 }
 
 /* Кнопка Home. Сама кнопка не вращается: на ней блик, наведение и импульс. */

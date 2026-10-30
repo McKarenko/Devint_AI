@@ -239,15 +239,15 @@ function readTrustedProxy(): string | undefined {
   }
 
   if (!isTrustedProxy(trustedProxy)) {
-    throw new Error("TRUSTED_PROXY должен быть IPv4-адресом или сетью, например 172.28.10.10 или 172.28.10.0/24")
+    throw new Error("TRUSTED_PROXY должен быть частным IPv4 и маской /24 или уже, например 172.28.10.10 или 172.28.10.0/24")
   }
 
   return trustedProxy
 }
 
-/** Проверяет один IPv4-адрес или сеть. Имена хостов не принимаем. */
+/** Проверяет частный IPv4. Сеть не шире /24. Имена хостов не принимаем. */
 function isTrustedProxy(value: string) {
-  /** Части адреса. Сеть после слэша необязательна. */
+  /** Части адреса. Сеть после слэша необязательна и тогда считается одним адресом. */
   const match = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})(?:\/(\d{1,2}))?$/.exec(value)
 
   if (!match) {
@@ -266,21 +266,24 @@ function isTrustedProxy(value: string) {
 
   /** Четыре октета. Каждый не больше 255. */
   const octets = [first, second, third, fourth].map(Number)
+  const a = octets[0]
+  const b = octets[1]
 
-  if (octets.some((octet) => octet > 255)) {
+  if (a === undefined || b === undefined || octets.some((octet) => octet > 255)) {
     return false
   }
 
-  if (match[5] !== undefined) {
-    /** Длина префикса сети. */
-    const bits = Number(match[5])
+  /** Маска. Один адрес без слэша — это /32. Шире /24 не принимаем. */
+  const bits = match[5] === undefined ? 32 : Number(match[5])
 
-    if (bits < 0 || bits > 32) {
-      return false
-    }
+  if (bits < 24 || bits > 32) {
+    return false
   }
 
-  return true
+  /** Частные диапазоны: 10/8, 172.16/12 и 192.168/16. */
+  const isPrivate = a === 10 || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168)
+
+  return isPrivate
 }
 
 /** Проверяет, что строка входит в список режимов писем. */

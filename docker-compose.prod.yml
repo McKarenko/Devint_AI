@@ -1,11 +1,22 @@
 # Выкладка. Локальную базу не трогает: том и порты другие, порт базы наружу не открыт.
 # Не запускать, пока нет сертификата и настоящего сервиса писем.
 # При NODE_ENV=production API сам не стартует без отправки писем. Это нарочно.
-# HSTS ставит Nginx, не сайт. Сайт по-прежнему без HSTS.
+# HSTS ставит Nginx, не сайт. На первом запуске срок короткий, см. шаблон Nginx.
+# restart у api стоит "no", пока нет настоящей почты. Вместе с ней сменить на unless-stopped.
+# API_HOST здесь только адрес прослушивания. Домены сайта и API — WEB_DOMAIN и API_DOMAIN.
+# read_only и tmpfs /tmp у api и web заданы в конфигурации. Хватит ли одного /tmp, покажет только живой запуск.
+
+x-log: &log
+  logging:
+    options:
+      max-size: "10m"
+      max-file: "5"
 
 services:
   db:
     image: pgvector/pgvector:pg17
+    <<: *log
+    mem_limit: 2g
     environment:
       POSTGRES_USER: ${POSTGRES_USER:?Задайте POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Задайте POSTGRES_PASSWORD}
@@ -25,6 +36,7 @@ services:
     restart: unless-stopped
 
   migrate:
+    <<: *log
     build:
       context: .
       dockerfile: infrastructure/docker/Dockerfile.api
@@ -39,14 +51,23 @@ services:
     restart: "no"
 
   api:
+    <<: *log
     build:
       context: .
       dockerfile: infrastructure/docker/Dockerfile.api
+    mem_limit: 1g
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp
     environment:
       NODE_ENV: production
       API_HOST: 172.28.10.11
       API_PORT: "4000"
-      WEB_ORIGIN: https://${WEB_HOST:?Задайте WEB_HOST}
+      WEB_ORIGIN: https://${WEB_DOMAIN:?Задайте WEB_DOMAIN}
       DATABASE_URL: postgresql://devint_app:${APP_DB_PASSWORD:?Задайте APP_DB_PASSWORD}@db:5432/${POSTGRES_DB:?Задайте POSTGRES_DB}
       LOGIN_THROTTLE_SECRET: ${LOGIN_THROTTLE_SECRET:?Задайте LOGIN_THROTTLE_SECRET}
       TRUSTED_PROXY: 172.28.10.10
@@ -60,26 +81,67 @@ services:
         condition: service_healthy
       migrate:
         condition: service_completed_successfully
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://172.28.10.11:4000/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     restart: "no"
 
   web:
+    <<: *log
     build:
       context: .
       dockerfile: infrastructure/docker/Dockerfile.web
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:?Задайте NEXT_PUBLIC_API_URL}
+    mem_limit: 1g
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp
     networks:
       - webnet
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     restart: unless-stopped
 
   nginx:
+    <<: *log
     image: nginx:1.27-alpine
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+      - CHOWN
+      - SETGID
+      - SETUID
     ports:
       - "80:80"
       - "443:443"
     environment:
-      WEB_HOST: ${WEB_HOST:?Задайте WEB_HOST}
-      API_HOST: ${API_HOST:?Задайте API_HOST}
+      WEB_DOMAIN: ${WEB_DOMAIN:?Задайте WEB_DOMAIN}
+      API_DOMAIN: ${API_DOMAIN:?Задайте API_DOMAIN}
     volumes:
       - ./infrastructure/docker/nginx/default.conf.template:/etc/nginx/templates/default.conf.template:ro
       - ${TLS_CERT_DIR:?Задайте TLS_CERT_DIR}:/etc/nginx/certs:ro

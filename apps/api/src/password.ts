@@ -20,7 +20,7 @@ const maxActiveHashes = 4
 /** Сколько случайных байт у пароля, из которого делается фиктивный хеш. */
 const dummyPasswordBytes = 32
 
-/** Если ожидающих уже больше этого числа, новый запрос не встаёт в очередь. */
+/** Если ожидающих уже столько, новый запрос не встаёт в очередь. */
 const maxWaitingHashes = 50
 
 /** Сколько хешей считается прямо сейчас. */
@@ -50,7 +50,7 @@ function acquireHashSlot() {
     return Promise.resolve()
   }
 
-  if (waitingHashes > maxWaitingHashes) {
+  if (waitingHashes >= maxWaitingHashes) {
     return Promise.reject(new HashQueueFullError())
   }
 

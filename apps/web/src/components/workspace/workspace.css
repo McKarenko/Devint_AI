@@ -99,7 +99,8 @@
   background-size: 100vw var(--workspace-material-height);
   background-repeat: no-repeat;
   /* Общий край под всей формой вместе с выступом: тонкая фаска, ловящая свет, и тёмный контакт под ней. */
-  filter: drop-shadow(0 1px 0 rgba(214, 226, 244, 0.11)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.42));
+  filter: drop-shadow(0 1px 0 rgba(214, 226, 244, 0.11)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.42))
+    drop-shadow(0 6px 10px rgba(28, 40, 58, 0.14));
   transition:
     translate 280ms var(--workspace-ease),
     filter 280ms var(--workspace-ease),
@@ -166,8 +167,8 @@
   content: "";
 }
 
-/* Маленький контролируемый блик сверху слева. Не вращается вместе с линзой, свет остаётся на месте. */
-.workspace-home::after {
+/* Блик принадлежит линзе и крутится вместе с ней. Сдвиг от общего света считается в её координатах. */
+.workspace-home-lens::after {
   position: absolute;
   top: 3px;
   left: 5px;
@@ -234,7 +235,8 @@
     --workspace-sheen: 0.1;
 
     translate: 0 var(--workspace-sink);
-    filter: drop-shadow(0 1px 0 rgba(214, 226, 244, 0.16)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.46));
+    filter: drop-shadow(0 1px 0 rgba(214, 226, 244, 0.16)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.46))
+      drop-shadow(0 6px 10px rgba(28, 40, 58, 0.14));
   }
 
   .workspace-header:hover .workspace-island {
@@ -250,7 +252,7 @@
     scale: 1.1;
   }
 
-  .workspace-home:hover::after {
+  .workspace-home:hover .workspace-home-lens::after {
     opacity: 0.95;
   }
 
@@ -267,7 +269,7 @@
   .workspace-header-plate,
   .workspace-island,
   .workspace-home,
-  .workspace-home::after,
+  .workspace-home-lens::after,
   .workspace-home-lens {
     transition: none;
   }
@@ -276,7 +278,8 @@
     --workspace-sheen: 0.06;
 
     translate: none;
-    filter: drop-shadow(0 1px 0 rgba(214, 226, 244, 0.11)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.42));
+    filter: drop-shadow(0 1px 0 rgba(214, 226, 244, 0.11)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.42))
+    drop-shadow(0 6px 10px rgba(28, 40, 58, 0.14));
   }
 
   .workspace-header:hover .workspace-home {
@@ -293,7 +296,7 @@
     animation: none;
   }
 
-  .workspace-home::after {
+  .workspace-home-lens::after {
     translate: none;
   }
 }

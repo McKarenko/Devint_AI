@@ -11,7 +11,7 @@
 @property --workspace-sheen {
   syntax: "<number>";
   inherits: true;
-  initial-value: 0.05;
+  initial-value: 0.06;
 }
 
 /*
@@ -43,15 +43,21 @@
 }
 
 /*
- * Один материал на пластину и выступ. Оба рисуют одинаковые слои в общих координатах:
- * высота слоя равна высоте материала, у выступа он сдвинут вверх на высоту пластины,
- * поэтому тон продолжается без шва. Горизонтально отсвет симметричен от центра.
+ * Один материал на пластину и выступ: тёмная керамика с направленным светом сверху слева.
+ * Оба рисуют одинаковые слои на общем полотне шириной 100vw с центром по оси экрана
+ * и высотой всего материала. У выступа полотно сдвинуто вверх на высоту пластины,
+ * поэтому свет и зерно продолжаются без шва.
+ * Зерно: две тонкие повторяющиеся линии с разным шагом, светлее на 2–3%. В режиме overlay
+ * они почти не видны на тёмном и проявляются только там, где падает свет.
  */
 .workspace-header-plate,
 .workspace-island {
   --workspace-material:
-    radial-gradient(ellipse 36vw 26px at 50% 14px, rgba(176, 202, 236, var(--workspace-sheen)), transparent),
-    linear-gradient(180deg, #1d2027 0%, #181a20 62%, #14161b 100%);
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.034) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(178deg, rgba(255, 255, 255, 0.024) 0 1px, transparent 1px 5px),
+    linear-gradient(104deg, rgba(198, 214, 236, var(--workspace-sheen)) 0%, transparent 46%),
+    linear-gradient(180deg, #181b21 0%, #121419 58%, #0e1014 100%);
+  --workspace-material-blend: overlay, overlay, normal, normal;
 }
 
 /* Пластина выходит за верх экрана на запас, чтобы при опускании сверху не открывалась щель. */
@@ -62,13 +68,14 @@
   bottom: 0;
   left: 0;
   border-radius: 0 0 16px 16px;
-  background-color: #181a20;
+  background-color: #121419;
   background-image: var(--workspace-material);
-  background-position: 0 0;
-  background-size: 100% var(--workspace-material-height);
+  background-blend-mode: var(--workspace-material-blend);
+  background-position: 50% 0;
+  background-size: 100vw var(--workspace-material-height);
   background-repeat: no-repeat;
-  /* Общий край под всей формой вместе с выступом: светлая кромка и слабый тёмный срез под ней. */
-  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.16)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.3));
+  /* Общий край под всей формой вместе с выступом: тонкая фаска, ловящая свет, и тёмный контакт под ней. */
+  filter: drop-shadow(0 1px 0 rgba(214, 226, 244, 0.11)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.42));
   transition:
     translate 280ms var(--workspace-ease),
     filter 280ms var(--workspace-ease),
@@ -99,8 +106,9 @@
   height: calc(var(--workspace-island-drop) + 1px);
   margin-left: calc(var(--workspace-island-width) / -2);
   border-radius: 0 0 10px 10px;
-  background-color: #14161b;
+  background-color: #0e1014;
   background-image: var(--workspace-material);
+  background-blend-mode: var(--workspace-material-blend);
   background-position: 50% calc((var(--workspace-plate-height) - 1px) * -1);
   background-size: 100vw var(--workspace-material-height);
   background-repeat: no-repeat;
@@ -134,25 +142,25 @@
   content: "";
 }
 
-/* Резкий блик сверху слева. Он не вращается вместе с линзой, свет остаётся на месте. */
+/* Маленький контролируемый блик сверху слева. Не вращается вместе с линзой, свет остаётся на месте. */
 .workspace-home::after {
   position: absolute;
-  top: 2px;
-  left: 4px;
-  width: 7px;
-  height: 3px;
+  top: 3px;
+  left: 5px;
+  width: 4px;
+  height: 2px;
   border-radius: 50%;
-  background: radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 72%);
+  background: radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0) 75%);
   content: "";
-  opacity: 0.85;
-  rotate: -28deg;
+  opacity: 0.7;
+  rotate: -30deg;
   pointer-events: none;
   transition: opacity 280ms var(--workspace-ease);
 }
 
 /*
- * Оптическая линза: без размытия фона. Тёмное ядро, тонкое кольцо преломления у края,
- * мягкий отсвет-каустика снизу, тонкий светлый обод.
+ * Оптическая линза: тёмное прозрачное ядро, тонкий оптический край,
+ * лёгкое преломление света у нижнего края. Без размытия фона и без свечения.
  */
 .workspace-home-lens {
   position: absolute;
@@ -161,25 +169,21 @@
   place-items: center;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 50% 50%, rgba(6, 8, 12, 0.5), rgba(6, 8, 12, 0.22) 46%, transparent 72%),
-    radial-gradient(circle at 50% 50%, transparent 56%, rgba(222, 232, 246, 0.2) 76%, transparent 92%),
-    radial-gradient(circle at 50% 114%, rgba(206, 220, 240, 0.48), transparent 52%),
-    rgba(214, 224, 238, 0.05);
+    radial-gradient(circle at 50% 100%, rgba(198, 216, 242, 0.2), transparent 58%),
+    radial-gradient(circle at 50% 42%, rgba(3, 5, 8, 0.62), rgba(3, 5, 8, 0.3) 72%);
   box-shadow:
-    inset 0 0 0 1px rgba(214, 224, 238, 0.46),
-    inset 0 1px 1px rgba(255, 255, 255, 0.34),
-    inset 0 -1px 2px rgba(190, 206, 230, 0.34),
-    0 1px 2px rgba(0, 0, 0, 0.5);
+    inset 0 0 0 1px rgba(214, 226, 244, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 1px 1px rgba(0, 0, 0, 0.6);
   transition:
     transform 420ms var(--workspace-ease),
     box-shadow 280ms var(--workspace-ease);
 }
 
-/* Иконка «видна сквозь стекло»: едва заметная холодная кромка. */
 .workspace-home-icon {
   width: 12px;
   height: 12px;
-  filter: drop-shadow(0.4px 0.4px 0 rgba(150, 200, 255, 0.4));
+  opacity: 0.88;
 }
 
 .workspace-home:focus-visible {
@@ -202,11 +206,11 @@
     --workspace-sheen: 0.1;
 
     translate: 0 var(--workspace-sink);
-    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.22)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.36));
+    filter: drop-shadow(0 1px 0 rgba(214, 226, 244, 0.16)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.46));
   }
 
   .workspace-header:hover .workspace-island {
-    scale: 1.05 1;
+    scale: 1.02 1;
   }
 
   .workspace-header:hover .workspace-home {
@@ -219,15 +223,14 @@
   }
 
   .workspace-home:hover::after {
-    opacity: 1;
+    opacity: 0.95;
   }
 
   .workspace-home:hover .workspace-home-lens {
     box-shadow:
-      inset 0 0 0 1px rgba(224, 233, 246, 0.66),
-      inset 0 1px 1px rgba(255, 255, 255, 0.46),
-      inset 0 -1px 2px rgba(190, 206, 230, 0.44),
-      0 1px 2px rgba(0, 0, 0, 0.5);
+      inset 0 0 0 1px rgba(214, 226, 244, 0.38),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      0 1px 1px rgba(0, 0, 0, 0.6);
   }
 }
 
@@ -241,10 +244,10 @@
   }
 
   .workspace-header:hover .workspace-header-plate {
-    --workspace-sheen: 0.05;
+    --workspace-sheen: 0.06;
 
     translate: none;
-    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.16)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.3));
+    filter: drop-shadow(0 1px 0 rgba(214, 226, 244, 0.11)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.42));
   }
 
   .workspace-header:hover .workspace-home {

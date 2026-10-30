@@ -5,17 +5,31 @@
 }
 
 /*
- * Значения высоты, выступа, цвета пластины и времени помечены provisional.
+ * Сила отсвета материала. Регистрируется, чтобы при наведении она менялась плавно.
+ * Выступ наследует значение у пластины, поэтому они светлеют вместе.
+ */
+@property --workspace-sheen {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0.05;
+}
+
+/*
+ * Все значения материала, высоты, выступа и времени помечены provisional / требует утверждения.
  * Источник правды: docs/ui/main-screen-design-system.md.
  */
 .workspace-header {
   --workspace-bar: 28px;
+  --workspace-safe-top: env(safe-area-inset-top, 0px);
   --workspace-island-width: 148px;
   --workspace-island-drop: 10px;
-  --workspace-plate: #181a20;
   --workspace-sink: 3px;
   --workspace-bleed: 8px;
   --workspace-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Высота пластины вместе с запасом над экраном и высота общего материала пластины и выступа. */
+  --workspace-plate-height: calc(var(--workspace-bleed) + var(--workspace-bar) + var(--workspace-safe-top));
+  --workspace-material-height: calc(var(--workspace-plate-height) + var(--workspace-island-drop));
 
   position: sticky;
   top: 0;
@@ -23,9 +37,21 @@
   display: grid;
   grid-template-columns: 1fr var(--workspace-island-width) 1fr;
   align-items: center;
-  height: calc(var(--workspace-bar) + env(safe-area-inset-top, 0px));
-  padding: env(safe-area-inset-top, 0px) max(8px, env(safe-area-inset-right, 0px)) 0
+  height: calc(var(--workspace-bar) + var(--workspace-safe-top));
+  padding: var(--workspace-safe-top) max(8px, env(safe-area-inset-right, 0px)) 0
     max(8px, env(safe-area-inset-left, 0px));
+}
+
+/*
+ * Один материал на пластину и выступ. Оба рисуют одинаковые слои в общих координатах:
+ * высота слоя равна высоте материала, у выступа он сдвинут вверх на высоту пластины,
+ * поэтому тон продолжается без шва. Горизонтально отсвет симметричен от центра.
+ */
+.workspace-header-plate,
+.workspace-island {
+  --workspace-material:
+    radial-gradient(ellipse 36vw 26px at 50% 14px, rgba(176, 202, 236, var(--workspace-sheen)), transparent),
+    linear-gradient(180deg, #1d2027 0%, #181a20 62%, #14161b 100%);
 }
 
 /* Пластина выходит за верх экрана на запас, чтобы при опускании сверху не открывалась щель. */
@@ -36,9 +62,17 @@
   bottom: 0;
   left: 0;
   border-radius: 0 0 16px 16px;
-  background: var(--workspace-plate);
-  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.16));
-  transition: translate 280ms var(--workspace-ease);
+  background-color: #181a20;
+  background-image: var(--workspace-material);
+  background-position: 0 0;
+  background-size: 100% var(--workspace-material-height);
+  background-repeat: no-repeat;
+  /* Общий край под всей формой вместе с выступом: светлая кромка и слабый тёмный срез под ней. */
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.16)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.3));
+  transition:
+    translate 280ms var(--workspace-ease),
+    filter 280ms var(--workspace-ease),
+    --workspace-sheen 280ms var(--workspace-ease);
   pointer-events: none;
 }
 
@@ -56,7 +90,7 @@
   min-width: 0;
 }
 
-/* Выступ: продолжение пластины того же цвета, без контура. */
+/* Выступ: продолжение пластины. Тот же материал, без контура, тени и своего градиента. */
 .workspace-island {
   position: absolute;
   top: calc(100% - 1px);
@@ -65,7 +99,11 @@
   height: calc(var(--workspace-island-drop) + 1px);
   margin-left: calc(var(--workspace-island-width) / -2);
   border-radius: 0 0 10px 10px;
-  background: var(--workspace-plate);
+  background-color: #14161b;
+  background-image: var(--workspace-material);
+  background-position: 50% calc((var(--workspace-plate-height) - 1px) * -1);
+  background-size: 100vw var(--workspace-material-height);
+  background-repeat: no-repeat;
   transform-origin: top center;
   transition: scale 280ms var(--workspace-ease);
 }
@@ -106,11 +144,16 @@
   border-radius: 50%;
   background: radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 72%);
   content: "";
+  opacity: 0.85;
   rotate: -28deg;
   pointer-events: none;
+  transition: opacity 280ms var(--workspace-ease);
 }
 
-/* Линза: прозрачная, без размытия. Холодное серебро: светлый обод, мягкий отсвет внизу, без голубого свечения. */
+/*
+ * Оптическая линза: без размытия фона. Тёмное ядро, тонкое кольцо преломления у края,
+ * мягкий отсвет-каустика снизу, тонкий светлый обод.
+ */
 .workspace-home-lens {
   position: absolute;
   inset: 0;
@@ -118,20 +161,25 @@
   place-items: center;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 50% 118%, rgba(206, 220, 240, 0.42), transparent 58%),
-    radial-gradient(circle at 50% 50%, transparent 56%, rgba(214, 224, 238, 0.22) 100%),
-    rgba(214, 224, 238, 0.06);
+    radial-gradient(circle at 50% 50%, rgba(6, 8, 12, 0.5), rgba(6, 8, 12, 0.22) 46%, transparent 72%),
+    radial-gradient(circle at 50% 50%, transparent 56%, rgba(222, 232, 246, 0.2) 76%, transparent 92%),
+    radial-gradient(circle at 50% 114%, rgba(206, 220, 240, 0.48), transparent 52%),
+    rgba(214, 224, 238, 0.05);
   box-shadow:
-    inset 0 0 0 1px rgba(214, 224, 238, 0.5),
-    inset 0 -2px 3px rgba(190, 206, 230, 0.3),
-    inset 0 1px 1px rgba(255, 255, 255, 0.4),
-    0 1px 3px rgba(0, 0, 0, 0.5);
-  transition: transform 420ms var(--workspace-ease);
+    inset 0 0 0 1px rgba(214, 224, 238, 0.46),
+    inset 0 1px 1px rgba(255, 255, 255, 0.34),
+    inset 0 -1px 2px rgba(190, 206, 230, 0.34),
+    0 1px 2px rgba(0, 0, 0, 0.5);
+  transition:
+    transform 420ms var(--workspace-ease),
+    box-shadow 280ms var(--workspace-ease);
 }
 
+/* Иконка «видна сквозь стекло»: едва заметная холодная кромка. */
 .workspace-home-icon {
   width: 12px;
   height: 12px;
+  filter: drop-shadow(0.4px 0.4px 0 rgba(150, 200, 255, 0.4));
 }
 
 .workspace-home:focus-visible {
@@ -145,13 +193,16 @@
 
 @keyframes workspace-home-pulse {
   40% {
-    scale: 1.24;
+    scale: 1.14;
   }
 }
 
 @media (hover: hover) and (pointer: fine) {
   .workspace-header:hover .workspace-header-plate {
+    --workspace-sheen: 0.1;
+
     translate: 0 var(--workspace-sink);
+    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.22)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.36));
   }
 
   .workspace-header:hover .workspace-island {
@@ -160,11 +211,23 @@
 
   .workspace-header:hover .workspace-home {
     translate: 0 calc(var(--workspace-sink) / 2);
-    scale: 1.08;
+    scale: 1.05;
   }
 
   .workspace-header:hover .workspace-home:hover {
-    scale: 1.16;
+    scale: 1.1;
+  }
+
+  .workspace-home:hover::after {
+    opacity: 1;
+  }
+
+  .workspace-home:hover .workspace-home-lens {
+    box-shadow:
+      inset 0 0 0 1px rgba(224, 233, 246, 0.66),
+      inset 0 1px 1px rgba(255, 255, 255, 0.46),
+      inset 0 -1px 2px rgba(190, 206, 230, 0.44),
+      0 1px 2px rgba(0, 0, 0, 0.5);
   }
 }
 
@@ -172,11 +235,18 @@
   .workspace-header-plate,
   .workspace-island,
   .workspace-home,
+  .workspace-home::after,
   .workspace-home-lens {
     transition: none;
   }
 
-  .workspace-header:hover .workspace-header-plate,
+  .workspace-header:hover .workspace-header-plate {
+    --workspace-sheen: 0.05;
+
+    translate: none;
+    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.16)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.3));
+  }
+
   .workspace-header:hover .workspace-home {
     translate: none;
   }

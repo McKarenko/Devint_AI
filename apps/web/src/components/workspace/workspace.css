@@ -27,6 +27,19 @@
   initial-value: 0.2;
 }
 
+/* Сила холодного среза и короткого рассеяния под ним. */
+@property --workspace-edge {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0.78;
+}
+
+@property --workspace-spill {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0.34;
+}
+
 /*
  * Все значения материала, высоты, выступа и времени помечены provisional / требует утверждения.
  * Источник правды: docs/ui/main-screen-design-system.md.
@@ -89,6 +102,9 @@
   right: 0;
   bottom: 0;
   left: 0;
+  --workspace-edge: 0.78;
+  --workspace-spill: 0.34;
+
   border-radius: 0;
   background-color: #121419;
   background-image: var(--workspace-material);
@@ -96,14 +112,52 @@
   background-position: 50% 0;
   background-size: 100vw var(--workspace-material-height);
   background-repeat: no-repeat;
-  /* Фаска по форме: тихий холодный край, тёмный контакт и короткое рассеяние в фон. */
-  filter: drop-shadow(0 1px 0 rgba(214, 226, 244, 0.09)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.42))
-    drop-shadow(0 6px 10px rgba(28, 40, 58, 0.11));
+  /* Тёмный контакт и глубина. Холодный срез — отдельный слой, рассеяние короткое и сине-стальное. */
+  filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.42)) drop-shadow(0 6px 10px rgba(28, 40, 58, 0.11))
+    drop-shadow(0 4px 7px rgba(52, 86, 122, var(--workspace-spill)));
   transition:
     translate 280ms var(--workspace-ease),
     filter 280ms var(--workspace-ease),
-    --workspace-sheen 280ms var(--workspace-ease);
+    --workspace-sheen 280ms var(--workspace-ease),
+    --workspace-edge 280ms var(--workspace-ease),
+    --workspace-spill 280ms var(--workspace-ease);
   pointer-events: none;
+}
+
+/* Волосковый холодный срез по нижней кромке пластины и фаски выступа. provisional / требует утверждения. */
+.workspace-header-plate::after {
+  position: absolute;
+  z-index: 2;
+  top: calc(100% - 1px);
+  right: 0;
+  left: 0;
+  height: calc(var(--workspace-island-drop) + 1px);
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(82, 114, 146, var(--workspace-edge)),
+    rgba(108, 144, 176, var(--workspace-edge)) calc(var(--light-x) * 100%),
+    rgba(82, 114, 146, var(--workspace-edge))
+  );
+  clip-path: polygon(
+    0 0,
+    calc(50% - var(--workspace-island-width) / 2) 0,
+    calc(50% - var(--workspace-island-width) / 2 + var(--workspace-island-chamfer))
+      var(--workspace-island-drop),
+    calc(50% + var(--workspace-island-width) / 2 - var(--workspace-island-chamfer))
+      var(--workspace-island-drop),
+    calc(50% + var(--workspace-island-width) / 2) 0,
+    100% 0,
+    100% 1px,
+    calc(50% + var(--workspace-island-width) / 2) 1px,
+    calc(50% + var(--workspace-island-width) / 2 - var(--workspace-island-chamfer))
+      calc(var(--workspace-island-drop) + 1px),
+    calc(50% - var(--workspace-island-width) / 2 + var(--workspace-island-chamfer))
+      calc(var(--workspace-island-drop) + 1px),
+    calc(50% - var(--workspace-island-width) / 2) 1px,
+    0 1px
+  );
 }
 
 .workspace-header-actions {
@@ -256,10 +310,12 @@
 @media (hover: hover) and (pointer: fine) {
   .workspace-header:hover .workspace-header-plate {
     --workspace-sheen: 0.1;
+    --workspace-edge: 0.9;
+    --workspace-spill: 0.42;
 
     translate: 0 var(--workspace-sink);
-    filter: drop-shadow(0 1px 0 rgba(214, 226, 244, 0.13)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.46))
-      drop-shadow(0 6px 10px rgba(28, 40, 58, 0.11));
+    filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.46)) drop-shadow(0 6px 10px rgba(28, 40, 58, 0.11))
+      drop-shadow(0 4px 7px rgba(52, 86, 122, var(--workspace-spill)));
   }
 
   .workspace-header:hover .workspace-island {
@@ -299,10 +355,12 @@
 
   .workspace-header:hover .workspace-header-plate {
     --workspace-sheen: 0.06;
+    --workspace-edge: 0.78;
+    --workspace-spill: 0.34;
 
     translate: none;
-    filter: drop-shadow(0 1px 0 rgba(214, 226, 244, 0.09)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.42))
-      drop-shadow(0 6px 10px rgba(28, 40, 58, 0.11));
+    filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.42)) drop-shadow(0 6px 10px rgba(28, 40, 58, 0.11))
+      drop-shadow(0 4px 7px rgba(52, 86, 122, var(--workspace-spill)));
   }
 
   .workspace-header:hover .workspace-home {

@@ -2,7 +2,9 @@ import type { Viewport } from "next"
 import type { ReactNode } from "react"
 
 import { SiteShell } from "@/components/site-shell"
+import { WorkspaceDock } from "@/components/workspace/workspace-dock"
 import { WorkspaceHeader } from "@/components/workspace/workspace-header"
+import { WorkspaceSurfaceProvider } from "@/components/workspace/workspace-surface"
 import { offerText, privacyText } from "@/lib/legal"
 
 /**
@@ -17,10 +19,13 @@ export const viewport: Viewport = {
 /** Рабочий экран: шапка сверху, подвала нет. Плашка cookie та же, что на входе. */
 export default function WorkspaceLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="workspace-screen">
-      <WorkspaceHeader />
-      <div className="flex min-h-0 flex-1 flex-col">{children}</div>
-      <SiteShell offer={offerText} privacy={privacyText} showFooter={false} />
-    </div>
+    <WorkspaceSurfaceProvider>
+      <div className="workspace-screen">
+        <WorkspaceHeader />
+        <div className="flex min-h-0 flex-1 flex-col">{children}</div>
+        <WorkspaceDock />
+        <SiteShell offer={offerText} privacy={privacyText} showFooter={false} />
+      </div>
+    </WorkspaceSurfaceProvider>
   )
 }

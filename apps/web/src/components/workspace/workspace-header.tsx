@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react"
 
 import { WorkspaceHomeButton } from "./workspace-home-button"
 import { WorkspaceIsland } from "./workspace-island"
+import { WorkspaceShopButton } from "./workspace-shop-button"
 
 import "./workspace.css"
 
@@ -73,6 +74,7 @@ function WorkspaceHeader() {
       </div>
       <div className="workspace-header-actions">
         <WorkspaceHomeButton />
+        <WorkspaceShopButton />
       </div>
       <div className="workspace-header-center" aria-hidden="true" />
       <div className="workspace-header-reserve" aria-hidden="true" />

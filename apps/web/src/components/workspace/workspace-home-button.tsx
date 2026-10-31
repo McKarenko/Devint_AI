@@ -3,10 +3,13 @@
 import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
 
+import { useWorkspaceSurface } from "./workspace-surface"
+
 /** Кнопка возврата на основной рабочий экран. */
 function WorkspaceHomeButton() {
   const pathname = usePathname()
   const router = useRouter()
+  const { openHome } = useWorkspaceSurface()
 
   /** Сколько раз нажали. Каждый клик крутит линзу ещё на 360°. */
   const [flips, setFlips] = useState(0)
@@ -30,6 +33,8 @@ function WorkspaceHomeButton() {
         setTurning(true)
       })
     }
+
+    openHome()
 
     if (pathname !== "/home") {
       router.push("/home")

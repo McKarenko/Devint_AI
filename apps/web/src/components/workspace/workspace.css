@@ -3,7 +3,7 @@
   min-height: 100vh;
   flex-direction: column;
   /* Запас под плавающий dock, чтобы будущий контент не прятался под ним. */
-  padding-bottom: calc(40px + 16px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(48px + 16px + env(safe-area-inset-bottom, 0px));
 }
 
 /*
@@ -51,7 +51,7 @@
 @property --dock-gap {
   syntax: "<length>";
   inherits: true;
-  initial-value: 16px;
+  initial-value: 10px;
 }
 
 /*
@@ -310,6 +310,11 @@
   opacity: 0.88;
 }
 
+.workspace-shop-icon {
+  width: 14px;
+  height: 14px;
+}
+
 .workspace-home:focus-visible,
 .workspace-shop:focus-visible {
   outline: 2px solid var(--color-accent);
@@ -330,21 +335,48 @@
   transform: rotateY(180deg);
 }
 
-/* Открытый магазин: холодный внутренний край, не неоновая подсветка. */
+/* Открытый магазин: свет внутри линзы, без внешней цветной тени. */
 .workspace-shop.is-open .workspace-shop-lens {
   box-shadow:
-    inset 0 0 0 1px rgba(140, 176, 206, 0.45),
-    inset 0 1px 0 rgba(186, 214, 236, 0.28),
+    inset 0 0 0 1px rgba(140, 176, 206, 0.72),
+    inset 0 1px 0 rgba(214, 228, 242, 0.5),
     0 1px 1px rgba(0, 0, 0, 0.6);
 }
 
-/* Пустая нижняя панель. Своё стекло, не копия шапки. provisional / требует утверждения. */
+.workspace-shop.is-open .workspace-shop-face {
+  background: radial-gradient(circle at 50% 28%, rgba(186, 214, 236, 0.22), transparent 68%);
+}
+
+.workspace-shop.is-open.is-flash .workspace-shop-lens {
+  animation: workspace-shop-rim 420ms var(--workspace-ease);
+}
+
+.workspace-shop.is-open.is-flash .workspace-shop-face {
+  animation: workspace-shop-field 420ms var(--workspace-ease);
+}
+
+@keyframes workspace-shop-rim {
+  40% {
+    box-shadow:
+      inset 0 0 0 1px rgba(168, 200, 224, 0.92),
+      inset 0 1px 0 rgba(226, 236, 246, 0.74),
+      0 1px 1px rgba(0, 0, 0, 0.6);
+  }
+}
+
+@keyframes workspace-shop-field {
+  40% {
+    background: radial-gradient(circle at 50% 24%, rgba(206, 224, 238, 0.42), transparent 64%);
+  }
+}
+
+/* Нижняя панель. Своё стекло, не копия шапки. provisional / требует утверждения. */
 .workspace-dock {
   --workspace-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --light-x: 0.36;
   --light-y: 0.2;
   --dock-width: 280px;
-  --dock-gap: 16px;
+  --dock-gap: 10px;
 
   position: fixed;
   z-index: 10;
@@ -387,13 +419,50 @@
 }
 
 .workspace-dock-slots > * {
-  transition: scale 280ms var(--workspace-ease);
+  transition:
+    scale 280ms var(--workspace-ease),
+    box-shadow 280ms var(--workspace-ease);
 }
 
-/* Подпись будущей линзы. В разметке её пока нет, в покое она скрыта. */
+/* Временные линзы показа. Круг 22px, знак 12px, подпись спрятана, пока панель сложена. */
+.workspace-dock-lens {
+  position: relative;
+  display: grid;
+  width: 22px;
+  height: 22px;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--color-text);
+  background:
+    radial-gradient(circle at 50% 100%, rgba(198, 216, 242, 0.16), transparent 58%),
+    radial-gradient(circle at 50% 42%, rgba(3, 5, 8, 0.55), rgba(3, 5, 8, 0.22) 72%);
+  box-shadow:
+    inset 0 0 0 1px rgba(214, 226, 244, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.workspace-dock-glyph {
+  display: grid;
+  place-items: center;
+}
+
+.workspace-dock-glyph svg {
+  width: 12px;
+  height: 12px;
+}
+
 .workspace-dock-label {
+  position: absolute;
+  top: calc(100% + 1px);
+  left: 50%;
+  color: rgba(214, 226, 244, 0.78);
+  font-size: 8px;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
   opacity: 0;
-  translate: 0 4px;
+  translate: -50% 4px;
   transition:
     opacity 280ms var(--workspace-ease),
     translate 280ms var(--workspace-ease);
@@ -449,16 +518,16 @@
 
   .workspace-shop.is-open:hover .workspace-shop-lens {
     box-shadow:
-      inset 0 0 0 1px rgba(150, 186, 214, 0.55),
-      inset 0 1px 0 rgba(196, 220, 238, 0.34),
+      inset 0 0 0 1px rgba(168, 200, 224, 0.86),
+      inset 0 1px 0 rgba(226, 236, 246, 0.62),
       0 1px 1px rgba(0, 0, 0, 0.6);
   }
 
   .workspace-dock:hover {
-    --dock-width: 312px;
-    --dock-gap: 20px;
+    --dock-width: 400px;
+    --dock-gap: 26px;
 
-    height: 40px;
+    height: 48px;
     border-color: rgba(108, 144, 176, 0.55);
     box-shadow:
       inset 0 1px 0 rgba(214, 226, 244, 0.2),
@@ -466,13 +535,25 @@
       0 10px 18px rgba(0, 0, 0, 0.28);
   }
 
-  .workspace-dock:hover .workspace-dock-slots > * {
-    scale: 1.06;
+  .workspace-dock:has(.workspace-dock-lens:hover) {
+    --dock-width: 440px;
+    --dock-gap: 32px;
+  }
+
+  .workspace-dock:has(.workspace-dock-lens:hover) .workspace-dock-lens {
+    scale: 0.96;
+  }
+
+  .workspace-dock:has(.workspace-dock-lens:hover) .workspace-dock-lens:hover {
+    scale: 1.12;
+    box-shadow:
+      inset 0 0 0 1px rgba(150, 186, 214, 0.62),
+      inset 0 1px 0 rgba(214, 228, 242, 0.42);
   }
 
   .workspace-dock:hover .workspace-dock-label {
     opacity: 1;
-    translate: 0 0;
+    translate: -50% 0;
   }
 }
 
@@ -486,6 +567,7 @@
   .workspace-dock,
   .workspace-dock-slots,
   .workspace-dock-slots > *,
+  .workspace-dock-lens,
   .workspace-dock-label,
   .workspace-home-lens::after,
   .workspace-home-lens {
@@ -516,7 +598,9 @@
   }
 
   .workspace-home.is-pulsing,
-  .workspace-home.is-turning .workspace-home-lens::after {
+  .workspace-home.is-turning .workspace-home-lens::after,
+  .workspace-shop.is-flash .workspace-shop-lens,
+  .workspace-shop.is-flash .workspace-shop-face {
     animation: none;
   }
 

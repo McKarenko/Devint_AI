@@ -36,6 +36,7 @@
   --workspace-safe-top: env(safe-area-inset-top, 0px);
   --workspace-island-width: 148px;
   --workspace-island-drop: 10px;
+  --workspace-island-chamfer: 12px;
   --workspace-sink: 3px;
   --workspace-bleed: 8px;
   --workspace-ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -66,41 +67,38 @@
  * Центр света задают --light-x и --light-y на общем полотне, поэтому пластина и выступ светятся вместе.
  * Оба рисуют одинаковые слои на общем полотне шириной 100vw с центром по оси экрана
  * и высотой всего материала. У выступа полотно сдвинуто вверх на высоту пластины,
- * поэтому свет и зерно продолжаются без шва.
- * Зерно: две тонкие повторяющиеся линии с разным шагом, светлее на 2–3%. В режиме overlay
- * они почти не видны на тёмном и проявляются только там, где падает свет.
+ * поэтому свет продолжается без шва.
  */
 .workspace-header-plate,
 .workspace-island {
   --workspace-material:
-    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.034) 0 1px, transparent 1px 3px),
-    repeating-linear-gradient(178deg, rgba(255, 255, 255, 0.024) 0 1px, transparent 1px 5px),
     radial-gradient(
       120vw 80vw at calc(var(--light-x) * 100%) calc(var(--light-y) * 100%),
       rgba(198, 214, 236, var(--workspace-sheen)),
       transparent 62%
     ),
     linear-gradient(180deg, #181b21 0%, #121419 58%, #0e1014 100%);
-  --workspace-material-blend: overlay, overlay, normal, normal;
+  --workspace-material-blend: normal, normal;
 }
 
 /* Пластина выходит за верх экрана на запас, чтобы при опускании сверху не открывалась щель. */
 .workspace-header-plate {
   position: absolute;
+  z-index: 1;
   top: calc(var(--workspace-bleed) * -1);
   right: 0;
   bottom: 0;
   left: 0;
-  border-radius: 0 0 16px 16px;
+  border-radius: 0;
   background-color: #121419;
   background-image: var(--workspace-material);
   background-blend-mode: var(--workspace-material-blend);
   background-position: 50% 0;
   background-size: 100vw var(--workspace-material-height);
   background-repeat: no-repeat;
-  /* Общий край под всей формой вместе с выступом: тонкая фаска, ловящая свет, и тёмный контакт под ней. */
-  filter: drop-shadow(0 1px 0 rgba(214, 226, 244, 0.11)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.42))
-    drop-shadow(0 3px 6px rgba(46, 78, 120, 0.18));
+  /* Фаска по форме: тихий холодный край, тёмный контакт и короткое рассеяние в фон. */
+  filter: drop-shadow(0 1px 0 rgba(214, 226, 244, 0.09)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.42))
+    drop-shadow(0 6px 10px rgba(28, 40, 58, 0.11));
   transition:
     translate 280ms var(--workspace-ease),
     filter 280ms var(--workspace-ease),
@@ -130,7 +128,13 @@
   width: var(--workspace-island-width);
   height: calc(var(--workspace-island-drop) + 1px);
   margin-left: calc(var(--workspace-island-width) / -2);
-  border-radius: 0 0 10px 10px;
+  border-radius: 0;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    calc(100% - var(--workspace-island-chamfer)) 100%,
+    var(--workspace-island-chamfer) 100%
+  );
   background-color: #0e1014;
   background-image: var(--workspace-material);
   background-blend-mode: var(--workspace-material-blend);
@@ -167,7 +171,7 @@
   content: "";
 }
 
-/* Блик принадлежит линзе и крутится вместе с ней. Сдвиг от общего света считается в её координатах. */
+/* Блик на лицевой стороне. Когда линза отворачивается, он прячется и возвращается вместе с лицом. */
 .workspace-home-lens::after {
   position: absolute;
   top: 3px;
@@ -178,6 +182,7 @@
   background: radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0) 75%);
   content: "";
   opacity: 0.7;
+  backface-visibility: hidden;
   rotate: -30deg;
   /* Тот же свет: от края до края не больше 3px по горизонтали и 1px по вертикали. */
   translate: calc((var(--light-x) - 0.36) / 0.14 * 3px) calc((var(--light-y) - 0.2) / 0.06 * 1px);
@@ -185,6 +190,23 @@
   transition:
     opacity 280ms var(--workspace-ease),
     translate 280ms var(--workspace-ease);
+}
+
+/* На обороте блик гаснет и загорается снова, когда лицо возвращается. Длительность как у поворота. */
+.workspace-home.is-turning .workspace-home-lens::after {
+  animation: workspace-glint-pass 640ms linear;
+}
+
+@keyframes workspace-glint-pass {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  18%,
+  82% {
+    opacity: 0;
+  }
 }
 
 /*
@@ -197,6 +219,7 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
+  transform-style: preserve-3d;
   background:
     radial-gradient(circle at 50% 100%, rgba(198, 216, 242, 0.2), transparent 58%),
     radial-gradient(circle at 50% 42%, rgba(3, 5, 8, 0.62), rgba(3, 5, 8, 0.3) 72%);
@@ -205,7 +228,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.14),
     0 1px 1px rgba(0, 0, 0, 0.6);
   transition:
-    transform 420ms var(--workspace-ease),
+    transform 640ms var(--workspace-ease),
     box-shadow 280ms var(--workspace-ease);
 }
 
@@ -235,8 +258,8 @@
     --workspace-sheen: 0.1;
 
     translate: 0 var(--workspace-sink);
-    filter: drop-shadow(0 1px 0 rgba(214, 226, 244, 0.16)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.46))
-      drop-shadow(0 3px 6px rgba(46, 78, 120, 0.18));
+    filter: drop-shadow(0 1px 0 rgba(214, 226, 244, 0.13)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.46))
+      drop-shadow(0 6px 10px rgba(28, 40, 58, 0.11));
   }
 
   .workspace-header:hover .workspace-island {
@@ -278,8 +301,8 @@
     --workspace-sheen: 0.06;
 
     translate: none;
-    filter: drop-shadow(0 1px 0 rgba(214, 226, 244, 0.11)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.42))
-    drop-shadow(0 3px 6px rgba(46, 78, 120, 0.18));
+    filter: drop-shadow(0 1px 0 rgba(214, 226, 244, 0.09)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.42))
+      drop-shadow(0 6px 10px rgba(28, 40, 58, 0.11));
   }
 
   .workspace-header:hover .workspace-home {
@@ -292,7 +315,8 @@
     scale: none;
   }
 
-  .workspace-home.is-pulsing {
+  .workspace-home.is-pulsing,
+  .workspace-home.is-turning .workspace-home-lens::after {
     animation: none;
   }
 

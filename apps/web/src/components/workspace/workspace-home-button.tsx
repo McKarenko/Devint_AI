@@ -8,11 +8,14 @@ function WorkspaceHomeButton() {
   const pathname = usePathname()
   const router = useRouter()
 
-  /** Сколько раз нажали. Каждый клик переворачивает линзу ещё на 180°. */
+  /** Сколько раз нажали. Каждый клик крутит линзу ещё на 360°. */
   const [flips, setFlips] = useState(0)
 
   /** Идёт короткий импульс масштаба. */
   const [pulsing, setPulsing] = useState(false)
+
+  /** Идёт полный оборот: блик на это время прячется с оборотной стороны. */
+  const [turning, setTurning] = useState(false)
 
   /** Переворачивает линзу и открывает /home, если это ещё не текущий адрес. */
   function onClick() {
@@ -21,8 +24,10 @@ function WorkspaceHomeButton() {
     if (!reduceMotion) {
       setFlips((value) => value + 1)
       setPulsing(false)
+      setTurning(false)
       window.requestAnimationFrame(() => {
         setPulsing(true)
+        setTurning(true)
       })
     }
 
@@ -34,14 +39,19 @@ function WorkspaceHomeButton() {
   return (
     <button
       type="button"
-      className={pulsing ? "workspace-home is-pulsing" : "workspace-home"}
+      className={["workspace-home", pulsing ? "is-pulsing" : "", turning ? "is-turning" : ""]
+        .filter(Boolean)
+        .join(" ")}
       aria-label="На основной экран"
       onClick={onClick}
-      onAnimationEnd={() => setPulsing(false)}
+      onAnimationEnd={(event) => {
+        if (event.animationName === "workspace-home-pulse") setPulsing(false)
+        if (event.animationName === "workspace-glint-pass") setTurning(false)
+      }}
     >
       <span
         className="workspace-home-lens"
-        style={{ transform: `perspective(64px) rotateY(${flips * 180}deg)` }}
+        style={{ transform: `perspective(64px) rotateY(${flips * 360}deg)` }}
       >
         <svg className="workspace-home-icon" viewBox="0 0 24 24" aria-hidden="true">
           <path
